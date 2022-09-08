@@ -1,0 +1,30 @@
+[0.015s] Invoking command in '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg': CMAKE_PREFIX_PATH=/opt/ros/foxy:${CMAKE_PREFIX_PATH} /usr/bin/cmake --build /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg -- -j16 -l16
+[0.055s] [100%] Built target cpp_node
+[0.064s] Invoked command in '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy:${CMAKE_PREFIX_PATH} /usr/bin/cmake --build /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg -- -j16 -l16
+[0.087s] Invoking command in '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg': CMAKE_PREFIX_PATH=/opt/ros/foxy:${CMAKE_PREFIX_PATH} /usr/bin/cmake --install /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg
+[0.092s] -- Install configuration: ""
+[0.093s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/unmanned_systems_ros2_pkg/cpp_node
+[0.093s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/pythonpath.sh
+[0.093s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/pythonpath.dsv
+[0.093s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages/unmanned_systems_ros2_pkg
+[0.093s] -- Installing: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages/unmanned_systems_ros2_pkg/some_python_module.py
+[0.093s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages/unmanned_systems_ros2_pkg/__init__.py
+[0.117s] Listing '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages/unmanned_systems_ros2_pkg'...
+[0.117s] Compiling '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages/unmanned_systems_ros2_pkg/some_python_module.py'...
+[0.120s] -- Installing: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/lib/unmanned_systems_ros2_pkg/python_node.py
+[0.120s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/ament_index/resource_index/package_run_dependencies/unmanned_systems_ros2_pkg
+[0.120s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/ament_index/resource_index/parent_prefix_path/unmanned_systems_ros2_pkg
+[0.120s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/ament_prefix_path.sh
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/ament_prefix_path.dsv
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/path.sh
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/environment/path.dsv
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/local_setup.bash
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/local_setup.sh
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/local_setup.zsh
+[0.121s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/local_setup.dsv
+[0.121s] -- Installing: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/package.dsv
+[0.122s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/ament_index/resource_index/packages/unmanned_systems_ros2_pkg
+[0.122s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/cmake/unmanned_systems_ros2_pkgConfig.cmake
+[0.122s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/cmake/unmanned_systems_ros2_pkgConfig-version.cmake
+[0.123s] -- Up-to-date: /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/install/unmanned_systems_ros2_pkg/share/unmanned_systems_ros2_pkg/package.xml
+[0.124s] Invoked command in '/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy:${CMAKE_PREFIX_PATH} /usr/bin/cmake --install /home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/build/unmanned_systems_ros2_pkg
