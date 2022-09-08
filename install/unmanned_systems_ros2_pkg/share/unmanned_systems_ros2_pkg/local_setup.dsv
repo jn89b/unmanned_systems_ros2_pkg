@@ -1,3 +1,0 @@
-source;share/unmanned_systems_ros2_pkg/environment/ament_prefix_path.sh
-source;share/unmanned_systems_ros2_pkg/environment/path.sh
-source;share/unmanned_systems_ros2_pkg/environment/pythonpath.sh
