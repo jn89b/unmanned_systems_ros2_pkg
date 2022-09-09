@@ -1,0 +1,54 @@
+<launch>
+    <!--This is where you can launch different turtlebots-->
+    <let name="model" default="$(env TURTLEBOT3_MODEL)" doc="model exec [burger, waffle, waffle_pi]"/>
+    
+    <!-- declare initial topic space name ie first_tb/vel_cmd -->
+    <let name="first_tb3"  default="Leonardo"/>
+    <let name="second_tb3" default="Raphael"/>
+
+    <!--positions of turtlebots-->
+    <let name="first_tb3_x_pos" default="2.0"/>
+    <let name="first_tb3_y_pos" default="0.0"/>
+    <let name="first_tb3_z_pos" default=" 0.0"/>
+    <let name="first_tb3_yaw"   default=" 1.57"/>
+
+    <let name="second_tb3_x_pos" default="7.0"/>
+    <let name="second_tb3_y_pos" default="1.0"/>
+    <let name="second_tb3_z_pos" default=" 0.0"/>
+    <let name="second_tb3_yaw"   default=" 1.57"/>
+
+    <include file="$(find-pkg-share gazebo_ros)/launch/empty_world.launch">
+        <let name="world_name" value="$(find turtlebot3_gazebo)/worlds/empty.world"/>
+        <let name="paused" value="false"/>
+        <let name="use_sim_time" value="true"/>
+        <let name="gui" value="true"/>
+        <let name="headless" value="false"/>
+        <let name="debug" value="false"/>
+    </include>
+
+    <group ns="$(arg first_tb3)">
+
+        <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="tf_prefix" value="$(var first_tb3)" />
+        </node>   
+
+        <node name="spawn_urdf" pkg="gazebo_ros" exec="spawn_model" args="-urdf -model $(var first_tb3)
+         -x $(var first_tb3_x_pos) -y $(var first_tb3_y_pos) -z $(var first_tb3_z_pos)
+          -Y $(var first_tb3_yaw)"/>
+
+    </group>
+
+    <!-- <group ns="$(var second_tb3)">        
+
+        <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen">
+            <param name="publish_frequency" exec="double" value="50.0" />
+            <param name="tf_prefix" value="$(var second_tb3)" />
+        </node>
+        <node name="spawn_urdf" pkg="gazebo_ros" exec="spawn_model" 
+        args="-urdf -model $(var second_tb3) -x $(var second_tb3_x_pos) 
+        -y $(var second_tb3_y_pos) -z $(var second_tb3_z_pos) 
+        -Y $(var second_tb3_yaw) -param robot_description"         
+        </node>
+    </group> -->
+
+</launch>
