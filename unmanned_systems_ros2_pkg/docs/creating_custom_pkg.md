@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
 
 ## Compile your custom package to implement Python and Cpp 
-Delete your CMakLists and copy paste this one, replace **project(<test_pkg>)** with the name of your custom package
+Delete your CMakLists and copy paste this one, replace **project(<test_pkg>)** with the name of your custom package, this allows you to include both cpp and python files in your package
 
 ```C
 cmake_minimum_required(VERSION 3.5)
@@ -155,6 +155,8 @@ In **package_name/package.xml** copy paste the following
   </export>
 </package>
 ``` 
+
+Change <name>test_pkg</name> to   <name>"your_pkg_name"</name>
 
 After **colcon** build your package with the following command:
 ```colcon build --packages-select test_pkg```
