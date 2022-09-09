@@ -1,12 +1,25 @@
-# Make sure to download vcs and
+# Install Turtlebot
+
+For reference: https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/
+
+In your terminal cd to your ros2 workspace and go to the src folder 
 ```
-sudo apt install python3-vcstool
+cd ros2_ws/src
 
-sudo apt-get install ros-foxy-gazebo-ros-pkgs 
+git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+
+git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+
+git clone -b foxy-devel https://github.com/ROBOTIS-GIT/turtlebot3.git 
+
 ```
 
+Then cd back to your top level directory of your ros2 workspace 
+```
+cd ../ 
 
-# Download Turtlebot for ROS2 FOLLOW PART B INSTALL FROM SOURCE CODE
-https://ros2-industrial-workshop.readthedocs.io/en/latest/_source/navigation/ROS2-Turtlebot.html
+rosdep install --from-paths src --ignore-src -r -y
 
+colcon build --symlink-install 
+```
 
