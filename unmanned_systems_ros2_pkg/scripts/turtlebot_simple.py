@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+from re import S
 import rclpy
 from rclpy.node import Node
 
@@ -9,12 +10,20 @@ from geometry_msgs.msg import Twist
 
 class TurtleBotNode(Node):
 
-    def __init__(self):
+    def __init__(self, ns=''):
         super().__init__('minimial_turtlebot')
         
+        if ns != '':
+            self.ns = ns
+        else:
+            self.ns = ns
+        
         #create vel and odom pub and subscribers
-        self.vel_publisher = self.create_publisher(Twist, "cmd_vel" ,  10) 
-        self.odom_subscriber = self.create_subscription(Odometry, "odom", self.odom_callback, 10)
+        self.vel_publisher = self.create_publisher(
+            Twist, self.ns+ "/cmd_vel" ,  10) 
+        
+        self.odom_subscriber = self.create_subscription(
+            Odometry, self.ns +"/odom", self.odom_callback, 10)
         
         self.current_position = [0,0]
 
@@ -30,12 +39,13 @@ class TurtleBotNode(Node):
         twist.angular.z = angular_vel
         self.vel_publisher.publish(twist)
     
-def main(args=None):
-    rclpy.init(args=args)
+def main():
+    rclpy.init(args=None)
     print("starting")
 
-    turtlebot_node = TurtleBotNode()
-    des_x_position = 2.0
+    namespace = ''
+    turtlebot_node = TurtleBotNode(namespace)
+    des_x_position = 5.0
     cmd_vel = 0.2
     stop_vel = 0.0
 
@@ -47,7 +57,8 @@ def main(args=None):
         
         elif turtlebot_node.current_position[0] >= des_x_position:
             turtlebot_node.move_turtle(stop_vel, 0.0)
-            
+            turtlebot_node.destroy_node()
+                                
         rclpy.spin_once(turtlebot_node)
 
     # Destroy the node explicitly

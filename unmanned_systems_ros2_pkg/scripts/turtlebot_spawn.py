@@ -7,6 +7,9 @@ Script used to spawn a turtlebot in a generic position
 import os
 import sys
 import rclpy
+import xml.etree.ElementTree as ET
+
+
 from ament_index_python.packages import get_package_share_directory
 from gazebo_msgs.srv import SpawnEntity
 
@@ -21,18 +24,11 @@ def main():
     rclpy.init()
     node = rclpy.create_node("entity_spawner")
     
-    #declare parameter inputs
-    # node.declare_parameter('gazebo_name' , '')
-    # node.declare_parameter('x_pos' , '0.0')
-    # node.declare_parameter('y_pos' , '0.0')
-    # node.declare_parameter('z_pos' , '0.01')
-    # node.declare_parameter('yaw_pos', '0.0')
-    
     node.declare_parameters(
     namespace='',
     parameters=[
-        ('gazebo_name', ''),
-        ('x_pos', 0.0),
+        ('gazebo_name', 'Leonardo'),
+        ('x_pos', 4.0),
         ('y_pos', 0.0),
         ('z_pos', 0.0),
         ('yaw_pos', 0.0)
@@ -59,15 +55,32 @@ def main():
         get_package_share_directory("turtlebot3_gazebo"), "models",
         "turtlebot3_"+TURTLEBOT3_MODEL, "model.sdf")
 
+    # We need to remap the transform (/tf) topic so each robot has its own.
+    # We do this by adding `ROS argument entries` to the urdf file for
+    # each plugin broadcasting a transform. These argument entries provide the
+    # remapping rule, i.e. /tf -> /<robot_id>/tf
+    
+    tree = ET.parse(sdf_file_path)
+    print("opening tree")
+    root = tree.getroot()
+    imu_plugin = None
+    diff_drive_plugin = None 
+    for plugin in root.iter('plugin'):
+        if 'turtlebot3_diff_drive' in plugin.attrib.values():
+            diff_drive_plugin = plugin
+        elif 'box_bot_imu_plugin' in plugin.attrib.values():
+            imu_plugin = plugin
+
+    # We change the namespace to the robots corresponding one
+    tag_diff_drive_ros_params = diff_drive_plugin.find('ros')
+    tag_diff_drive_ns = ET.SubElement(tag_diff_drive_ros_params, 'namespace')
+    tag_diff_drive_ns.text = '/' + gazebo_name_param
+
+    ros_tf_remap = ET.SubElement(tag_diff_drive_ros_params, 'remapping')
+    ros_tf_remap.text = '/tf:=/' + gazebo_name_param + '/tf'
+
     # Set data for request
     request = SpawnEntity.Request()
-    # request.name = argv[0]
-    # request.xml = open(sdf_file_path, 'r').read()
-    # request.robot_namespace = argv[1]
-    # request.initial_pose.position.x = float(argv[2])
-    # request.initial_pose.position.y = float(argv[3])
-    # request.initial_pose.position.z = float(argv[4])
-
     request.name = gazebo_name_param
     request.xml = open(sdf_file_path, 'r').read()
     request.robot_namespace = gazebo_name_param
