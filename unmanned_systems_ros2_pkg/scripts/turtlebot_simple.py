@@ -2,10 +2,34 @@
 import os
 from re import S
 import rclpy
+import math 
+
 from rclpy.node import Node
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
+
+def euler_from_quaternion(x:float, y:float, z:float, w:float) -> tuple:
+        """
+        Convert a quaternion into euler angles (roll, pitch, yaw)
+        roll is rotation around x in radians (counterclockwise)
+        pitch is rotation around y in radians (counterclockwise)
+        yaw is rotation around z in radians (counterclockwise)
+        """
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        roll_x = math.atan2(t0, t1)
+     
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        pitch_y = math.asin(t2)
+     
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        yaw_z = math.atan2(t3, t4)
+     
+        return roll_x, pitch_y, yaw_z # in radians
 
 
 class TurtleBotNode(Node):
@@ -26,11 +50,26 @@ class TurtleBotNode(Node):
             Odometry, self.ns +"/odom", self.odom_callback, 10)
         
         self.current_position = [0,0]
+        self.orientation_quat = [0,0,0,0] #x,y,z,w
+        self.orientation_euler = [0,0,0] #roll, pitch, yaw
 
     def odom_callback(self,msg:Odometry) -> None:
         """subscribe to odometry"""
         self.current_position[0] = msg.pose.pose.position.x
         self.current_position[1] = msg.pose.pose.position.y
+        
+        qx = msg.pose.pose.orientation.x
+        qy = msg.pose.pose.orientation.y
+        qz = msg.pose.pose.orientation.z
+        qw = msg.pose.pose.orientation.w
+        
+        roll,pitch,yaw = euler_from_quaternion(qx, qy, qz, qw)
+        
+        self.orientation_euler[0] = roll
+        self.orientation_euler[1] = pitch 
+        self.orientation_euler[2] = yaw
+        
+        print("rpy is ", self.orientation_euler)
 
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
         """Moves turtlebot"""
@@ -45,14 +84,16 @@ def main():
 
     namespace = ''
     turtlebot_node = TurtleBotNode(namespace)
-    des_x_position = 5.0
-    cmd_vel = 0.2
+    des_x_position = 7.0
+    cmd_vel = 0.0
+    ang_vel = 0.5
+    
     stop_vel = 0.0
 
     while rclpy.ok():
         
         if turtlebot_node.current_position[0] <= des_x_position:
-            turtlebot_node.move_turtle(cmd_vel, 0.0)
+            turtlebot_node.move_turtle(cmd_vel, ang_vel)
             print("not there yet", turtlebot_node.current_position[0])    
         
         elif turtlebot_node.current_position[0] >= des_x_position:
