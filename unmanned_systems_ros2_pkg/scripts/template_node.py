@@ -41,10 +41,10 @@ def main() -> None:
     #create some node
     some_node = SomeNode()
 
-    
-    while rcply.ok():
-        pass
+    #while your running node
+    while rclpy.ok():
+        rclpy.spin(some_node)
     
 
 if __name__ =='__main__':
-    pass
+    main()

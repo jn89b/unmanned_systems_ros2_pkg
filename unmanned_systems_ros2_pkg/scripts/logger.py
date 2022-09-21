@@ -111,8 +111,6 @@ def main():
 
 		rclpy.spin_once(odom_node)
 
-	print('done')
-
 
 if __name__ == '__main__':
 	main()
