@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-import os
 from re import S
 import rclpy
 import math 
+import numpy as np
 
 from rclpy.node import Node
+from rclpy.duration import Duration
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
+from unmanned_systems_ros2_pkg import some_python_module
 
+
+def get_time_in_secs(some_node:Node) -> float:
+    return some_node.get_clock().now().nanoseconds /1E9
+    
 def euler_from_quaternion(x:float, y:float, z:float, w:float) -> tuple:
         """
         Convert a quaternion into euler angles (roll, pitch, yaw)
@@ -31,9 +37,7 @@ def euler_from_quaternion(x:float, y:float, z:float, w:float) -> tuple:
      
         return roll_x, pitch_y, yaw_z # in radians
 
-
 class TurtleBotNode(Node):
-
     def __init__(self, ns=''):
         super().__init__('minimial_turtlebot')
         
@@ -41,7 +45,7 @@ class TurtleBotNode(Node):
             self.ns = ns
         else:
             self.ns = ns
-        
+                
         #create vel and odom pub and subscribers
         self.vel_publisher = self.create_publisher(
             Twist, self.ns+ "/cmd_vel" ,  10) 
@@ -69,8 +73,8 @@ class TurtleBotNode(Node):
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
         
-        print("rpy is ", self.orientation_euler)
-
+        print("yaw is", np.degrees(self.orientation_euler[2]))
+        
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
         """Moves turtlebot"""
         twist = Twist()
@@ -78,35 +82,49 @@ class TurtleBotNode(Node):
         twist.angular.z = angular_vel
         self.vel_publisher.publish(twist)
     
-def main():
+def main()->None:
     rclpy.init(args=None)
     print("starting")
 
     namespace = ''
+    rate_val = 5
     turtlebot_node = TurtleBotNode(namespace)
+    rate = turtlebot_node.create_rate(rate_val)
+    
     des_x_position = 7.0
     cmd_vel = 0.0
     ang_vel = 0.5
     
     stop_vel = 0.0
-
+    
+    time_duration = 5
+    time_now = get_time_in_secs(turtlebot_node)
+    print("time now is", time_now)
+    
     while rclpy.ok():
         
-        if turtlebot_node.current_position[0] <= des_x_position:
-            turtlebot_node.move_turtle(cmd_vel, ang_vel)
-            print("not there yet", turtlebot_node.current_position[0])    
+        time_diff = get_time_in_secs(turtlebot_node) - time_now 
         
-        elif turtlebot_node.current_position[0] >= des_x_position:
+        if (time_diff <= time_duration):
+            turtlebot_node.move_turtle(cmd_vel, ang_vel)
+        else:
             turtlebot_node.move_turtle(stop_vel, 0.0)
-            turtlebot_node.destroy_node()
-                                
-        rclpy.spin_once(turtlebot_node)
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    turtlebot_node.destroy_node()
-    rclpy.shutdown()
+            # Destroy the node explicitly
+            # (optional - otherwise it will be done automatically
+            # when the garbage collector destroys the node object)
+            # turtlebot_node.destroy_node()
+            rclpy.shutdown()
+                
+        # if turtlebot_node.current_position[0] <= des_x_position:
+        #     turtlebot_node.move_turtle(cmd_vel, ang_vel)
+        #     print("not there yet", turtlebot_node.current_position[0])    
+        
+        # elif turtlebot_node.current_position[0] >= des_x_position:
+        #     turtlebot_node.move_turtle(stop_vel, 0.0)
+        #     turtlebot_node.destroy_node()
+                    
+        rclpy.spin_once(turtlebot_node)
 
 if __name__ == '__main__':
     """apply imported function"""
