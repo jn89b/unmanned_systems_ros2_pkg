@@ -42,8 +42,8 @@ def main() -> None:
     some_node = SomeNode()
 
     
-    # while rcply.ok():
-        
+    while rcply.ok():
+        pass
     
 
 if __name__ =='__main__':
