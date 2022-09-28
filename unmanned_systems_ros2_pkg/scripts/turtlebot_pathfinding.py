@@ -9,6 +9,8 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
 
+from unmanned_systems_ros2_pkg import PathFinding, Map
+
 # define functions here 
 
 # class node to run
@@ -35,15 +37,48 @@ class SomeNode(Node):
 def main() -> None:
     """run your main loop here"""
     
+    #initiate map
+    x_span = [0,10]
+    y_span = [0,10]
+    grid_space = 0.5
+    
+    enemy_list = [(1,1), (4,4), (3,4), (5,0), (5,1), (0,7), (1,7), (2,7), (3,7)]
+    configSpace = Map.ConfigSpace(x_span, y_span, grid_space, enemy_list)
+    configSpace.set_graph_coords()
+    obstacle_radius = 0.5
+    
+    """define start and end"""
+    start_position = (0,0)
+    goal_position = (8, 8)
+    
+    step_size = 1
+    move_list = [[step_size,0], #move left
+                [-step_size,0], #move right 
+                [0,step_size], #move up
+                [0,-step_size], #move down
+                [step_size, step_size],
+                [step_size, -step_size],
+                [-step_size, step_size],
+                [-step_size, -step_size]
+                ]
+    
+    
     #initiate node 
     rclpy.init(args=None)
     
     #create some node
-    some_node = SomeNode()
+    # some_node = SomeNode()
 
     #while your running node
-    while rclpy.ok():
-        rclpy.spin(some_node)
+    
+    astar = PathFinding.Astar((0,0), (5,5), move_list,
+                              configSpace, obstacle_radius)
+        
+    astar_path = astar.find_path()
+    
+    print("path is", astar_path)
+    # while rclpy.ok():
+    #     rclpy.spin(some_node)
     
 
 if __name__ =='__main__':
