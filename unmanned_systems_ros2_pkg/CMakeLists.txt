@@ -35,6 +35,7 @@ install(PROGRAMS
   scripts/turtlebot_simple.py
   scripts/turtlebot_spawn.py
   scripts/logger.py
+  scripts/turtlebot_evader.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

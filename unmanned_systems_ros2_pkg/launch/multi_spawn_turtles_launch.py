@@ -52,8 +52,8 @@ def generate_launch_description():
 
     # Pose where we want to spawn the robot
     name = "turtle"
-    spawn_x_val = 4.0
-    spawn_y_val = 1.0
+    spawn_x_val = 2.0
+    spawn_y_val = 2.0
     spawn_z_val = 0.00
     spawn_yaw_val = 0.00
     

@@ -11,7 +11,6 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from unmanned_systems_ros2_pkg import some_python_module
 
-
 def get_time_in_secs(some_node:Node) -> float:
     return some_node.get_clock().now().nanoseconds /1E9
     
