@@ -3,26 +3,33 @@ from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
-from unmanned_systems_ros2_pkg import quaternion_tools
+from unmanned_systems_ros2_pkg import quaternion_tools, PIDTemplate
 
 class TurtleBotNode(Node):
-    def __init__(self, node_name, ns='' ):
+    def __init__(self, node_name, ns='' , controller = None ):
         super().__init__(node_name)
         
         if ns != '':
             self.ns = ns
         else:
             self.ns = ns
+            
+        if controller != None:
+            
+            self.pid = PIDTemplate(kp=controller[0], 
+                                   ki=controller[1],
+                                   kd=controller[2],
+                                   dt=controller[3]) 
                 
         #create vel and odom pub and subscribers
         self.vel_publisher = self.create_publisher(
-            Twist, self.ns+ "/cmd_vel" ,  10) 
+            Twist, self.ns+ "/cmd_vel" ,  1) 
         
         self.odom_subscriber = self.create_subscription(
-            Odometry, self.ns +"/odom", self.odom_callback, 10)
+            Odometry, self.ns +"/odom", self.odom_callback, 1)
         
         self.lidar_subscriber = self.create_subscription(
-             LaserScan, self.ns+"/scan", self.lidar_track_cb, 10)
+             LaserScan, self.ns+"/scan", self.lidar_track_cb, 1)
         
         self.current_position = [0,0]
         self.orientation_quat = [0,0,0,0] #x,y,z,w
@@ -68,3 +75,5 @@ class TurtleBotNode(Node):
             if val != inf:
                 self.detected_heading_angle_list.append(i)
                 self.detected_range_list.append(val)
+                
+

@@ -52,7 +52,7 @@ class TurtleBotNode(Node):
         self.odom_subscriber = self.create_subscription(
             Odometry, self.ns +"/odom", self.odom_callback, 10)
         
-        self.current_position = [0,0]
+        self.current_position = [None,None]
         self.orientation_quat = [0,0,0,0] #x,y,z,w
         self.orientation_euler = [0,0,0] #roll, pitch, yaw
 

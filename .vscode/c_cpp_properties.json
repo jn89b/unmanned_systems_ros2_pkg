@@ -1,0 +1,25 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/justin/ros2_ws/install/turtlebot3_gazebo/include/**",
+        "/home/justin/ros2_ws/install/turtlebot3_fake_node/include/**",
+        "/opt/ros/foxy/include/**",
+        "/home/justin/ros2_ws/src/turtlebot3_simulations/turtlebot3_fake_node/include/**",
+        "/home/justin/ros2_ws/src/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+        "/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/unmanned_systems_ros2_pkg/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
