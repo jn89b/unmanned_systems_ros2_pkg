@@ -37,6 +37,8 @@ install(PROGRAMS
   scripts/logger.py
   scripts/turtlebot_evader.py
   scripts/pursuer.py
+  scripts/foot_ninja_2.py
+  scripts/foot_ninja_1.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

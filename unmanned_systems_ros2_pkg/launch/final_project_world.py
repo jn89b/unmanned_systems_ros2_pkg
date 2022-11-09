@@ -10,8 +10,6 @@ from launch.actions import IncludeLaunchDescription
 from launch.actions import GroupAction
 
 from launch_ros.actions import PushRosNamespace
-
-
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -25,14 +23,12 @@ TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
 def generate_launch_description():
     """launch"""
     use_sim_time = LaunchConfiguration('use_sim_time', default='True')
-    world_file_name = 'empty_worlds/' + TURTLEBOT3_MODEL + '.model'
+    world_file_name = 'turtlebot3_final_project/' + TURTLEBOT3_MODEL + '.model'
     world = os.path.join(get_package_share_directory('turtlebot3_gazebo'),
                          'worlds', world_file_name)
     
     launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
-
-    print("path directory", get_package_share_directory('turtlebot3_description'))
 
     urdf_file_name = 'turtlebot3_' + TURTLEBOT3_MODEL + '.urdf'
     urdf = os.path.join(
@@ -50,10 +46,10 @@ def generate_launch_description():
             parameters=[{'use_sim_time': use_sim_time}],
             arguments=[urdf])
 
-    # Pose where we want to spawn the robot
-    name = "turtle"
-    spawn_x_val = 2.0
-    spawn_y_val = 2.0
+    # FIRST FOOT NINJA
+    name = "foot_ninja_1"
+    spawn_x_val = -1.25
+    spawn_y_val = -3.0
     spawn_z_val = 0.00
     spawn_yaw_val = 0.00
     
@@ -74,7 +70,35 @@ def generate_launch_description():
             name = 'robot_state_publisher',
             namespace= name,
             output='screen',
-            parameters=[{'use_sim_time': use_sim_time}],
+            parameters=[{'use_sim_time': use_sim_time, 'frame_prefix': name}],
+            arguments=[urdf]
+        )
+
+    # SECOND FOOT NINJA
+    name_2 = "foot_ninja_2"
+    foot_ninja_x = -1.25
+    foot_ninja_y = -5.75
+    foot_ninja_z = 0.00
+    spawn_yaw_val = 0.00
+    
+    foot_ninja_2_tb = Node(
+        package="unmanned_systems_ros2_pkg",
+        executable="turtlebot_spawn.py",
+        parameters=[
+                    {'gazebo_name' : name_2}, 
+                    {'x_pos': foot_ninja_x }, 
+                    {'y_pos': foot_ninja_y}, 
+                    {'z_pos': foot_ninja_z}, 
+                    {'yaw_pos': spawn_yaw_val}]
+    )
+    
+    foot_ninja_2_state = Node(
+            package='robot_state_publisher',
+            executable='robot_state_publisher',
+            name = 'robot_state_publisher',
+            namespace= name_2,
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time, 'frame_prefix': name_2}],
             arguments=[urdf]
         )
     
@@ -93,30 +117,32 @@ def generate_launch_description():
                     )
                 )
     
-    #first robot launch
-    launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
-    launch_include = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([launch_file_dir, '/robot_state_publisher.launch.py']),
-            launch_arguments={'use_sim_time': use_sim_time}.items(),
-        )
-    
-    # include another launch file in the chatter_ns namespace
-    # launch_include_with_namespace = GroupAction(
-    #     actions=[
-    #         # push-ros-namespace to set namespace of included nodes
-    #         PushRosNamespace(LaunchConfiguration(name)),
-    #         launch_include,
-    #     ]
-    # )
+    # #first robot launch
+    # launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
+    # launch_include = IncludeLaunchDescription(
+    #         PythonLaunchDescriptionSource([launch_file_dir, '/robot_state_publisher.launch.py']),
+    #         launch_arguments={'use_sim_time': use_sim_time}.items(),
+    #     )
 
+    launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
+    # launch_include = IncludeLaunchDescription(
+    #         PythonLaunchDescriptionSource([launch_file_dir, '/robot_state_publisher.launch.py']),
+    #         launch_arguments={'use_sim_time': use_sim_time}.items(),
+    #     )
+    
     #add actions
     ld = LaunchDescription()
     ld.add_action(start_gazebo_server_cmd)
     ld.add_action(start_gazebo_client_cmd)
-    ld.add_action(launch_include)
+    ld.add_action(state_publisher_cmd)
+
+    # ld.add_action(launch_include)
     ld.add_action(spawn_second_tb)
-    # ld.add_action(spawn_entity_cmd)
     ld.add_action(second_state_publisher)
+
+    ld.add_action(foot_ninja_2_tb)
+    ld.add_action(foot_ninja_2_state)
+    # ld.add_action(spawn_entity_cmd)
 
     return ld
 
