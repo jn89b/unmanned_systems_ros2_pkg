@@ -39,6 +39,7 @@ install(PROGRAMS
   scripts/pursuer.py
   scripts/foot_ninja_2.py
   scripts/foot_ninja_1.py
+  scripts/foot_ninja_spawn.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()
@@ -46,5 +47,7 @@ ament_package()
 #launch
 install(DIRECTORY
   launch
+  models
+  urdf
   DESTINATION share/${PROJECT_NAME}
 )

@@ -15,6 +15,7 @@ from gazebo_msgs.srv import SpawnEntity
 
 TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
 
+TURTLEBOT3_MODEL = 'waffle'
 def main():
     """ Main for spwaning turtlebot node """
     # Get input arguments from user
@@ -27,11 +28,12 @@ def main():
     node.declare_parameters(
     namespace='',
     parameters=[
-        ('gazebo_name', 'Leonardo'),
+        ('gazebo_name', 'foot_ninja_1'),
         ('x_pos', 4.0),
         ('y_pos', 0.0),
         ('z_pos', 0.0),
-        ('yaw_pos', 0.0)
+        ('yaw_pos', 0.0),
+        ('model_name', 'foot_ninja_1')
     ]
     )
     
@@ -40,7 +42,8 @@ def main():
     y_pos_param = node.get_parameter('y_pos').value
     z_pos_param = node.get_parameter('z_pos').value
     yaw_pos_param = node.get_parameter('yaw_pos').value
-    
+    model_name_param = node.get_parameter('model_name').value
+
     node.get_logger().info(
         'Creating Service client to connect to `/spawn_entity`')
     client = node.create_client(SpawnEntity, "/spawn_entity")
@@ -52,8 +55,12 @@ def main():
 
     # Get path to the turtlebot3 burgerbot
     sdf_file_path = os.path.join(
-        get_package_share_directory("turtlebot3_gazebo"), "models",
-        "turtlebot3_"+TURTLEBOT3_MODEL, "model.sdf")
+        get_package_share_directory("unmanned_systems_ros2_pkg"), "models",
+        'foot_ninja_1', "model.sdf")
+
+    # sdf_file_path = os.path.join(
+    #     get_package_share_directory("turtlebot3_gazebo"), "models",
+    #     "turtlebot3_"+TURTLEBOT3_MODEL, "model.sdf")
 
     # We need to remap the transform (/tf) topic so each robot has its own.
     # We do this by adding `ROS argument entries` to the urdf file for
@@ -71,24 +78,14 @@ def main():
         elif 'box_bot_imu_plugin' in plugin.attrib.values():
             imu_plugin = plugin
 
-    print("diff drive", diff_drive_plugin)
-
     # We change the namespace to the robots corresponding one
     tag_diff_drive_ros_params = diff_drive_plugin.find('ros')
     tag_diff_drive_ns = ET.SubElement(tag_diff_drive_ros_params, 'namespace')
-    tag_diff_drive_ns.text = '/' + gazebo_name_param
+    tag_diff_drive_ns.text = '/' + gazebo_name_param + '/'
 
     ros_tf_remap = ET.SubElement(tag_diff_drive_ros_params, 'remapping')
     ros_tf_remap.text = '/tf:=/' + gazebo_name_param + '/tf'
-
-    tag_diff_drive_ros_params = diff_drive_plugin.find('odometry_topic')
-    print(tag_diff_drive_ros_params)
-    ros_odom_remap = ET.SubElement(diff_drive_plugin, 'odometry_topic')
-    ros_odom_remap.text = '/' + gazebo_name_param + '/odom'
-
-    # tag_diff_drive_ros_params = diff_drive_plugin.find('odometry_frame')
-    # ros_odom_remap_tf = ET.SubElement(diff_drive_plugin, 'odometry_frame')
-    # ros_odom_remap_tf.text = '/' + gazebo_name_param + '/odom'
+    print(ros_tf_remap.text)
 
     # Set data for request
     request = SpawnEntity.Request()

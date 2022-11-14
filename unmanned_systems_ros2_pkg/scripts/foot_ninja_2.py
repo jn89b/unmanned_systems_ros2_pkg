@@ -61,6 +61,7 @@ def main() -> None:
 
             for waypoint in waypoints:
                 print("going to waypoint", waypoint)
+                print("positon is", foot_ninja_2.current_position)
                 desired_heading, heading_error, dist_error = gimme_da_loot(foot_ninja_2, waypoint)
 
                 while (abs(dist_error) >= dist_tolerance) or (abs(heading_error) >= heading_tol):

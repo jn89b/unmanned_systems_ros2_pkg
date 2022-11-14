@@ -1,0 +1,2 @@
+# Notes on spawning turtlebots with appropriate tf
+In order for this to work you need to make a different .urdf file so robot_description can run properly. Running duplicate .urdf files with the same name will not have correct transforms for the system

@@ -37,7 +37,7 @@ def gimme_da_loot(turtlebot:TurtleBotNode, waypoint:list) -> list:
 def main() -> None:
     rclpy.init(args=None)
     
-    foot_ninja_1 = TurtleBotNode.TurtleBotNode('foot_ninja_1', 'foot_ninja_1')    
+    foot_ninja_1 = TurtleBotNode.TurtleBotNode('foot_ninja_1_patrol', 'foot_ninja_1')    
     foot_ninja_1.move_turtle(0.0,0.0)
 
 
@@ -62,7 +62,8 @@ def main() -> None:
 
             while (abs(dist_error) >= dist_tolerance) or (abs(heading_error) >= heading_tol):
                 # print("desired heading is", m.degrees(desired_heading), heading_error)
-        
+                print(foot_ninja_1.current_position)
+
                 if abs(dist_error) >= dist_tolerance and  abs(heading_error) <= heading_tol:
                     foot_ninja_1.move_turtle(line_speed, stop_speed)
                 elif abs(dist_error) < dist_tolerance and  abs(heading_error) >= heading_tol:
