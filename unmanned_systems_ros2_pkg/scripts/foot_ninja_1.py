@@ -47,7 +47,7 @@ def main() -> None:
     line_speed = 0.1 #m/s
     stop_speed = 0.0 #m/s
 
-    patrol_distance = 0.25 #
+    patrol_distance = 0.35 #
     origin_position = [-1.25, -3.0]
 
     waypoints = [[origin_position[0],origin_position[1] + patrol_distance],

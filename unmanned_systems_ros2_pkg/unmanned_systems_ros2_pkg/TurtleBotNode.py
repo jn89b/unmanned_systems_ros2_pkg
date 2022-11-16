@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 from unmanned_systems_ros2_pkg import quaternion_tools, PIDTemplate
 
 class TurtleBotNode(Node):
-    def __init__(self, node_name, ns='' , controller = None ):
+    def __init__(self, node_name:str, ns='' , controller = None ):
         super().__init__(node_name)
         
         if ns != '':

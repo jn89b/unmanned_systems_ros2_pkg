@@ -30,6 +30,7 @@ def generate_launch_description():
     
     launch_file_dir = os.path.join(get_package_share_directory(
         'turtlebot3_gazebo'), 'launch')    ### SPAWN MAIN TB
+
     
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
 
@@ -39,6 +40,7 @@ def generate_launch_description():
         'urdf',
         urdf_file_name)
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+
 
     # Subscribe to the joint states of the robot, and publish the 3D pose of each link.    
     state_publisher_cmd = Node(
