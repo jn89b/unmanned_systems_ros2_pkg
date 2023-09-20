@@ -35,12 +35,6 @@ install(PROGRAMS
   scripts/turtlebot_simple.py
   scripts/turtlebot_spawn.py
   scripts/logger.py
-  scripts/turtlebot_evader.py
-  scripts/pursuer.py
-  scripts/foot_ninja_2.py
-  scripts/foot_ninja_1.py
-  scripts/foot_ninja_spawn.py
-  scripts/dungeon_master.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()
