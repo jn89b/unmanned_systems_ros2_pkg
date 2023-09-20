@@ -33,7 +33,6 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   scripts/python_node.py
   scripts/turtlebot_simple.py
-  scripts/turtlebot_spawn.py
   scripts/logger.py
   DESTINATION lib/${PROJECT_NAME}
 )
@@ -42,9 +41,9 @@ ament_package()
 #launch
 install(DIRECTORY
   launch
-  models
-  urdf
-  worlds
-  assets
+  # models
+  # urdf
+  # worlds
+  # assets
   DESTINATION share/${PROJECT_NAME}
 )
