@@ -108,7 +108,6 @@ def main()->None:
             turtlebot_node.move_turtle(cmd_vel, ang_vel)
         else:
             turtlebot_node.move_turtle(stop_vel, 0.0)
-
             # Destroy the node explicitly
             # (optional - otherwise it will be done automatically
             # when the garbage collector destroys the node object)

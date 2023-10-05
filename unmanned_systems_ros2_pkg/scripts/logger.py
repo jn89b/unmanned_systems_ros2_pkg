@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*- 
 
 
@@ -29,6 +29,7 @@ class OdomLocNode(Node):
 		self.orientation_euler = [None,None,None]
 		self.odom_subscriber = self.create_subscription(
 			Odometry, sub_topic, self.odom_callback, 10)
+		
 		 
 
 	def odom_callback(self,msg):
@@ -50,7 +51,7 @@ class OdomLocNode(Node):
 		print("yaw is", np.degrees(self.orientation_euler[2]))
 
 def main():
-	FILEPATH = "/home/justin/ros2/src/unmanned_systems_ros2_pkg/unmanned_systems_ros2_pkg/log/"
+	FILEPATH = "/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/unmanned_systems_ros2_pkg/log/"
 	FILENAME = "dumpster_log.csv"
 
 	print(os.getcwd())
