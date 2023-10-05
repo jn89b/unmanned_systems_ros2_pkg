@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 from rclpy.node import Node
-from rclpy.duration import Duration
+from rclpy.duration  import Duration
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
@@ -91,12 +91,12 @@ def main()->None:
     turtlebot_node = TurtleBotNode(namespace)
     rate = turtlebot_node.create_rate(rate_val)
     
-    des_x_position = 7.0
     cmd_vel = 1.0 #m/s
     ang_vel = 0.5 #rad/s
     stop_vel = 0.0
     time_duration = 5
     
+    # time intilization ref 
     time_origin = get_time_in_secs(turtlebot_node)
     print("time now is", time_origin)
     

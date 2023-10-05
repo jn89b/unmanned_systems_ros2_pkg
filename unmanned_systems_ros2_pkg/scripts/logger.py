@@ -12,6 +12,7 @@ import time
 import csv
 import os
 import datetime
+from geometry_msgs.msg import Twist
 
 from nav_msgs.msg import Odometry
 
@@ -27,12 +28,19 @@ class OdomLocNode(Node):
 		super().__init__('logger_node')
 		self.current_position = [None,None]
 		self.orientation_euler = [None,None,None]
+		
+		self.linear_vel_x = None
+		self.angular_vel_z = None
+
 		self.odom_subscriber = self.create_subscription(
 			Odometry, sub_topic, self.odom_callback, 10)
 		
-		 
+		# we want to do the same thing for vel
+		self.vel_subscriber = self.create_subscription(
+			Odometry, sub_topic, self.odom_callback, 10)
+		
 
-	def odom_callback(self,msg):
+	def odom_callback(self,msg:Odometry):
 		"""subscribe to odometry"""
 		self.current_position[0] = msg.pose.pose.position.x
 		self.current_position[1] = msg.pose.pose.position.y
@@ -101,8 +109,13 @@ def main():
 		# create the data vector which we will write to the file, remember if you change
 		# something here, but don't change the header string, your column headers won't
 		# match the data
-		myData = [now, odom_node.current_position[0], odom_node.current_position[1],
-			odom_node.orientation_euler[2]]
+		myData = [now, 
+			odom_node.current_position[0], 
+			odom_node.current_position[1],
+			odom_node.orientation_euler[2],
+			#vx, 
+			#angular z 
+			]
 
 		# stick everything in the file
 		myFile = open(fileName, 'a')

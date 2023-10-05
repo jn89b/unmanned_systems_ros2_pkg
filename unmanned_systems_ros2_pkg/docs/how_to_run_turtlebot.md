@@ -24,3 +24,15 @@ Just do the following command
 ros2 run unmanned_systems_ros2_pkg your_ros2_node.py
 ```
 
+
+## Helpful ROS2 commands to trouble shoot
+### ROS 2 Topics
+To see all topics 
+```
+ros2 topic list
+```
+
+To show the some_topic 
+```
+ros2 topic info /cmd_vel 
+```
