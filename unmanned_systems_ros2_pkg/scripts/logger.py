@@ -35,10 +35,19 @@ class OdomLocNode(Node):
 		self.odom_subscriber = self.create_subscription(
 			Odometry, sub_topic, self.odom_callback, 10)
 		
-		# we want to do the same thing for vel
+
 		self.vel_subscriber = self.create_subscription(
 			Odometry, sub_topic, self.odom_callback, 10)
+
+		# we want to do the same thing for vel
+		# t
+		self.vel_subscriber = self.create_subscription(
+			Twist, 'cmd_vel', self.vel_callback, 10)
 		
+
+	def vel_callback(self, msg:Twist): 
+		self.linear_vel_x = msg.linear.x 
+		self.angular_vel_z = msg.angular.z	
 
 	def odom_callback(self,msg:Odometry):
 		"""subscribe to odometry"""
@@ -113,7 +122,8 @@ def main():
 			odom_node.current_position[0], 
 			odom_node.current_position[1],
 			odom_node.orientation_euler[2],
-			#vx, 
+			odom_node.linear_vel_x,
+			odom_node.angular_vel_z#vx, 
 			#angular z 
 			]
 

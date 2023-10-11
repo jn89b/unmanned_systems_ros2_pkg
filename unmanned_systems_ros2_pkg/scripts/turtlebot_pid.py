@@ -9,8 +9,7 @@ from rclpy.duration  import Duration
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
-from unmanned_systems_ros2_pkg import some_python_module
-
+from unmanned_systems_ros2_pkg import PIDTemplate
 
 def get_time_in_secs(some_node:Node) -> float:
     return some_node.get_clock().now().nanoseconds /1E9 
@@ -74,7 +73,7 @@ class TurtleBotNode(Node):
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
         
-        print("yaw is", np.degrees(self.orientation_euler[2]))
+        # print("yaw is", np.degrees(self.orientation_euler[2]))
         
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
         """Moves turtlebot"""
@@ -100,31 +99,59 @@ def main()->None:
     # time intilization ref 
     time_origin = get_time_in_secs(turtlebot_node)
     print("time now is", time_origin)
-    
-    while rclpy.ok():
-        
-        time_diff = get_time_in_secs(turtlebot_node) - time_origin 
-        
-        if (time_diff <= time_duration):
-            turtlebot_node.move_turtle(cmd_vel, ang_vel)
-        else:
-            turtlebot_node.move_turtle(stop_vel, 0.0)
 
-            # Destroy the node explicitly
-            # (optional - otherwise it will be done automatically
-            # when the garbage collector destroys the node object)
-            # turtlebot_node.destroy_node()
-            rclpy.shutdown()
-                
-        # if turtlebot_node.current_position[0] <= des_x_position:
-        #     turtlebot_node.move_turtle(cmd_vel, ang_vel)
-        #     print("not there yet", turtlebot_node.current_position[0])    
-        
-        # elif turtlebot_node.current_position[0] >= des_x_position:
-        #     turtlebot_node.move_turtle(stop_vel, 0.0)
-        #     turtlebot_node.destroy_node()
-                    
-        rclpy.spin_once(turtlebot_node)
+    kp_angular = 10
+    ki_angular = 0.0
+    kd_angular  = 0.0
+    dt_angular = 1/20
+
+    pid_angular = PIDTemplate.PID(
+        kp = kp_angular,
+        ki = ki_angular,
+        kd = kd_angular,
+        dt = dt_angular)
+
+    # set a desired heading angle 
+    des_yaw_angle_rad = np.deg2rad(180)
+
+    MAX_ANG_SPEED_RAD = 2.84 #rad/s
+
+    # try:
+    try: 
+        while rclpy.ok():
+            
+            #COPY PASTE
+            angular_gains = pid_angular.get_gains(
+                des_yaw_angle_rad,
+                turtlebot_node.orientation_euler[2]
+            )
+
+            print("my heading error is", 
+                np.rad2deg(pid_angular.error[0]))
+
+
+            if angular_gains >= MAX_ANG_SPEED_RAD:
+                angular_gains = MAX_ANG_SPEED_RAD
+            elif angular_gains <= -MAX_ANG_SPEED_RAD:
+                angular_gains = -MAX_ANG_SPEED_RAD
+
+            # COPY PASTE END HERE
+
+            # add an error tolerance
+            # if you're close to error:
+                # angular_gains = 0
+
+            print("my gains are", angular_gains)    
+
+            turtlebot_node.move_turtle(0.0, angular_gains)
+
+
+            rclpy.spin_once(turtlebot_node)
+
+    except KeyboardInterrupt:
+        turtlebot_node.move_turtle(0.0, 0.0)
+
+    
 
 if __name__ == '__main__':
     """apply imported function"""

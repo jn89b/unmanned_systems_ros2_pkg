@@ -11,6 +11,7 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from unmanned_systems_ros2_pkg import some_python_module
 
+
 def get_time_in_secs(some_node:Node) -> float:
     return some_node.get_clock().now().nanoseconds /1E9 
     
@@ -78,7 +79,7 @@ class TurtleBotNode(Node):
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
         """Moves turtlebot"""
         twist = Twist()
-        twist.linear.x = linear_vel
+        twist.linear.x = linear_vel 
         twist.angular.z = angular_vel
         self.vel_publisher.publish(twist)
     
