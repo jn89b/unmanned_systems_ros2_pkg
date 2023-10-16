@@ -124,6 +124,7 @@ def main()->None:
     # try:
     try: 
         rclpy.spin_once(turtlebot_node)
+
         while rclpy.ok():
 
             # get current waypoint
@@ -138,6 +139,8 @@ def main()->None:
                 turtlebot_node.orientation_euler[2]                
             )
 
+            current_distance_error = np.sqrt(dx**2 + dy**2)
+        
             ### SET CORRECT HEADING ------------
             while abs(current_heading_error_rad) >= heading_error_tol_rad:
                 
@@ -172,7 +175,19 @@ def main()->None:
 
             ### ONCE HEADING IS CORRECT SEND FORWARD ---- 
 
-            rclpy.spin_once(turtlebot_node)
+            while current_distance_error >= distance_error_tolerance_m:
+                dx = current_wp[0] - turtlebot_node.current_position[0]
+                dy = current_wp[1] -  turtlebot_node.current_position[1]
+                current_distance_error = np.sqrt(dx**2 + dy**2)
+
+                if (current_distance_error <= distance_error_tolerance_m):
+                    print("converged to wp")
+                    turtlebot_node.move_turtle(0.0, 0.0)
+                    break
+
+                turtlebot_node.move_turtle(0.23, 0.0)
+
+                rclpy.spin_once(turtlebot_node)
 
     except KeyboardInterrupt:
         turtlebot_node.move_turtle(0.0, 0.0)
