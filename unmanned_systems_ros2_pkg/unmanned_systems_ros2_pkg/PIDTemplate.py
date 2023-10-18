@@ -25,7 +25,11 @@ class PID():
 
     def compute_error(self, des:float, 
                       actual:float) -> float:
-        self.error[0] = des-actual
+        
+        if actual <= 0:
+            self.error[0] = des+actual
+        else:
+            self.error[0] = des-actual
         
         return self.error[0] 
         

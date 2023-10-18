@@ -22,7 +22,7 @@ def generate_launch_description():
     
     logger_node = Node(
         package='unmanned_systems_ros2_pkg',
-        namespace=turtle_ns,
+        namespace=logger_ns,
         executable='logger.py'
     )
 

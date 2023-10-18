@@ -118,7 +118,7 @@ def main()->None:
         [2,2]
         ]
 
-    heading_error_tol_rad = np.deg2rad(0.5)
+    heading_error_tol_rad = np.deg2rad(1)
     distance_error_tolerance_m = 0.15#m
 
     # try:
@@ -153,9 +153,6 @@ def main()->None:
                     print("I'm done")
                     break
 
-                # print("desired heading is", np.rad2deg(desired_heading_rad))
-                # print("current position is", turtlebot_node.current_position)
-
                 angular_gains = pid_angular.get_gains(
                     desired_heading_rad,
                     turtlebot_node.orientation_euler[2]
@@ -176,6 +173,26 @@ def main()->None:
             ### ONCE HEADING IS CORRECT SEND FORWARD ---- 
 
             while current_distance_error >= distance_error_tolerance_m:
+
+                current_heading_error_rad = pid_angular.compute_error(
+                    desired_heading_rad,
+                    turtlebot_node.orientation_euler[2]                
+                )
+            
+                angular_gains = pid_angular.get_gains(
+                    desired_heading_rad,
+                    turtlebot_node.orientation_euler[2]
+                )
+
+                print("my heading error is", 
+                    np.rad2deg(pid_angular.error[0]))
+
+                if angular_gains >= MAX_ANG_SPEED_RAD:
+                    angular_gains = MAX_ANG_SPEED_RAD
+                elif angular_gains <= -MAX_ANG_SPEED_RAD:
+                    angular_gains = -MAX_ANG_SPEED_RAD
+                
+
                 dx = current_wp[0] - turtlebot_node.current_position[0]
                 dy = current_wp[1] -  turtlebot_node.current_position[1]
                 current_distance_error = np.sqrt(dx**2 + dy**2)
@@ -185,7 +202,7 @@ def main()->None:
                     turtlebot_node.move_turtle(0.0, 0.0)
                     break
 
-                turtlebot_node.move_turtle(0.23, 0.0)
+                turtlebot_node.move_turtle(0.2, angular_gains)
 
                 rclpy.spin_once(turtlebot_node)
 

@@ -72,8 +72,14 @@ class TurtleBotNode(Node):
         self.orientation_euler[0] = roll
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
+
+        #Wrap yaw  from to 0 to 2pi
+        if self.orientation_euler[2] < 0:
+            self.orientation_euler[2] += 2*np.pi
+        else:
+            self.orientation_euler[2] = self.orientation_euler[2]
         
-        # print("yaw is", np.degrees(self.orientation_euler[2]))
+        print("yaw is", np.degrees(self.orientation_euler[2]))
         
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
         """Moves turtlebot"""
@@ -112,14 +118,22 @@ def main()->None:
         dt = dt_angular)
 
     # set a desired heading angle 
-    des_yaw_angle_rad = np.deg2rad(180)
+    des_yaw_angle_rad = np.deg2rad(225)
 
     MAX_ANG_SPEED_RAD = 2.84 #rad/s
+
+    GOT_INITIAL_HEADING = False
 
     # try:
     try: 
         while rclpy.ok():
-            
+
+            if GOT_INITIAL_HEADING == False:
+                initial_yaw_rad = turtlebot_node.orientation_euler[2]
+                GOT_INITIAL_HEADING = True
+
+            des_yaw_angle_rad = initial_yaw_rad + des_yaw_angle_rad      
+
             #COPY PASTE
             angular_gains = pid_angular.get_gains(
                 des_yaw_angle_rad,
@@ -140,6 +154,8 @@ def main()->None:
             # add an error tolerance
             # if you're close to error:
                 # angular_gains = 0
+
+
 
             print("my gains are", angular_gains)    
 
