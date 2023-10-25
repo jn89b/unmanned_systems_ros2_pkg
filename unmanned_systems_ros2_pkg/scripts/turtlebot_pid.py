@@ -92,7 +92,7 @@ def main()->None:
     rclpy.init(args=None)
     print("starting")
 
-    namespace = ''
+    namespace = 'evader'
     rate_val = 5
     turtlebot_node = TurtleBotNode(namespace)
     rate = turtlebot_node.create_rate(rate_val)

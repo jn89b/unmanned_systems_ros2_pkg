@@ -38,6 +38,8 @@ install(PROGRAMS
   scripts/turtlebot_pid.py
   scripts/turtlebot_wp.py
   scripts/turtlebot_spawn.py
+  scripts/pn.py
+  scripts/evader.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()
