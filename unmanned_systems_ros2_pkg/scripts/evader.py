@@ -47,7 +47,7 @@ def gimme_da_loot(turtlebot:TurtleBotNode, waypoint:list) -> list:
 def main() -> None:
     rclpy.init(args=None)
     
-    turtlebot_evader = TurtleBotNode.TurtleBotNode('turtle', 'turtle')    
+    turtlebot_evader = TurtleBotNode.TurtleBotNode('turtle', 'evader')    
     turtlebot_evader.move_turtle(0.0,0.0)
 
     set_random = False
