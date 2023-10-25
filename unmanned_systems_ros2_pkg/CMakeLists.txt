@@ -37,6 +37,7 @@ install(PROGRAMS
   scripts/ros2_hw_4_node.py
   scripts/turtlebot_pid.py
   scripts/turtlebot_wp.py
+  scripts/turtlebot_spawn.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()
