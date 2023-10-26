@@ -52,7 +52,7 @@ def main() -> None:
 
     set_random = False
     is_done = False
-    n_random_waypoints = 1
+    n_random_waypoints =  3
     heading_tol = 0.1; #radians
     dist_tolerance = 0.25 #meters
     

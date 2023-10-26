@@ -73,11 +73,18 @@ class TurtleBotNode(Node):
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
 
-        #Wrap yaw  from to 0 to 2pi
-        if self.orientation_euler[2] < 0:
-            self.orientation_euler[2] += 2*np.pi
-        else:
-            self.orientation_euler[2] = self.orientation_euler[2]
+        # #Wrap yaw  from to 0 to 2pi
+        # if self.orientation_euler[2] < 0:
+        #     self.orientation_euler[2] += 2*np.pi
+        # else:
+        #     self.orientation_euler[2] = self.orientation_euler[2] 
+
+        #wrap angle from 0 to 360
+        # if self.orientation_euler[2] > 2*np.pi:
+        #     self.orientation_euler[2] -= 2*np.pi
+        # else:
+        #     self.orientation_euler[2] = self.orientation_euler[2]
+
         
         print("yaw is", np.degrees(self.orientation_euler[2]))
         

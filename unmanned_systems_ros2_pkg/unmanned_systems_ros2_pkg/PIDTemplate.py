@@ -11,6 +11,7 @@ get_gains() -> return command
 
 
 """
+import numpy as np
 
 class PID():
     def __init__(self, kp, ki, kd, dt) -> None:
@@ -24,12 +25,25 @@ class PID():
         print("whats up man")
 
     def compute_error(self, des:float, 
-                      actual:float) -> float:
+                      actual:float,
+                      angle_wrap:bool=False) -> float:
         
-        if actual <= 0:
-            self.error[0] = des+actual
-        else:
-            self.error[0] = des-actual
+        # if actual <= 0:
+        #     self.error[0] = des+actual
+        # else:
+        self.error[0] = des-actual
+
+        # if angle_wrap == True:
+        #     #then wrap the error 
+
+        # if self.error[0] > 2*np.pi:
+        #     self.error[0] -= 2*np.pi
+        # else:
+        #     self.error[0] = self.error[0]
+
+        if self.error[0] < 0:
+            print("error is negative")
+
         
         return self.error[0] 
         

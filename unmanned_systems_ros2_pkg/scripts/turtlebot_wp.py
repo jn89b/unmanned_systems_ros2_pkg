@@ -11,6 +11,7 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 from unmanned_systems_ros2_pkg import PIDTemplate
 
+
 def get_time_in_secs(some_node:Node) -> float:
     return some_node.get_clock().now().nanoseconds /1E9 
     
@@ -72,6 +73,12 @@ class TurtleBotNode(Node):
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
         
+        #Wrap yaw  from to 0 to 2pi
+        # if self.orientation_euler[2] < 0:
+        #     self.orientation_euler[2] += 2*np.pi
+        # else:
+        #     self.orientation_euler[2] = self.orientation_euler[2]
+
         # print("yaw is", np.degrees(self.orientation_euler[2]))
         
     def move_turtle(self, linear_vel:float, angular_vel:float) -> None:
@@ -114,11 +121,16 @@ def main()->None:
 
     # waypoint list 
     wp_list = [
-        [2,2]
+        [0,1],  
+        [2,2],
+        [3,-3],
+        [4,4]
         ]
 
     heading_error_tol_rad = np.deg2rad(1)
     distance_error_tolerance_m = 0.15#m
+    num_waypoints = len(wp_list)
+    wp_counter = 0
 
     # try:
     try: 
@@ -126,84 +138,88 @@ def main()->None:
 
         while rclpy.ok():
 
-            # get current waypoint
-            current_wp = wp_list[0]
-
-            dx = current_wp[0] - turtlebot_node.current_position[0]
-            dy = current_wp[1] -  turtlebot_node.current_position[1]
-            desired_heading_rad = np.arctan2(dy,dx)
-
-            current_heading_error_rad = pid_angular.compute_error(
-                desired_heading_rad,
-                turtlebot_node.orientation_euler[2]                
-            )
-
-            current_distance_error = np.sqrt(dx**2 + dy**2)
         
-            ### SET CORRECT HEADING ------------
-            while abs(current_heading_error_rad) >= heading_error_tol_rad:
-                
-                current_heading_error_rad = pid_angular.compute_error(
-                    desired_heading_rad,
-                    turtlebot_node.orientation_euler[2]                
-                )
-            
-                if (abs(current_heading_error_rad) <= heading_error_tol_rad):
-                    print("I'm done")
-                    break
+            for current_wp in wp_list:
 
-                angular_gains = pid_angular.get_gains(
-                    desired_heading_rad,
-                    turtlebot_node.orientation_euler[2]
-                )
-
-                print("my heading error is", 
-                    np.rad2deg(pid_angular.error[0]))
-
-                if angular_gains >= MAX_ANG_SPEED_RAD:
-                    angular_gains = MAX_ANG_SPEED_RAD
-                elif angular_gains <= -MAX_ANG_SPEED_RAD:
-                    angular_gains = -MAX_ANG_SPEED_RAD
-                
-                turtlebot_node.move_turtle(0.0, angular_gains)
-
-                rclpy.spin_once(turtlebot_node)
-
-            ### ONCE HEADING IS CORRECT SEND FORWARD ---- 
-
-            while current_distance_error >= distance_error_tolerance_m:
-                
-                current_heading_error_rad = pid_angular.compute_error(
-                    desired_heading_rad,
-                    turtlebot_node.orientation_euler[2]                
-                )
-            
-                angular_gains = pid_angular.get_gains(
-                    desired_heading_rad,
-                    turtlebot_node.orientation_euler[2]
-                )
-
-                print("my heading error is", 
-                    np.rad2deg(pid_angular.error[0]))
-
-                if angular_gains >= MAX_ANG_SPEED_RAD:
-                    angular_gains = MAX_ANG_SPEED_RAD
-                elif angular_gains <= -MAX_ANG_SPEED_RAD:
-                    angular_gains = -MAX_ANG_SPEED_RAD
-                
+                # get current waypoint
+                # current_wp = wp_list[0]
 
                 dx = current_wp[0] - turtlebot_node.current_position[0]
                 dy = current_wp[1] -  turtlebot_node.current_position[1]
+                desired_heading_rad = np.arctan2(dy,dx)
+
+                current_heading_error_rad = pid_angular.compute_error(
+                    desired_heading_rad,
+                    turtlebot_node.orientation_euler[2]                
+                )
+
                 current_distance_error = np.sqrt(dx**2 + dy**2)
+            
+                ### SET CORRECT HEADING ------------
+                while abs(current_heading_error_rad) >= heading_error_tol_rad:
+                    
+                    current_heading_error_rad = pid_angular.compute_error(
+                        desired_heading_rad,
+                        turtlebot_node.orientation_euler[2]                
+                    )
+                
+                    if (abs(current_heading_error_rad) <= heading_error_tol_rad):
+                        print("I'm done")
+                        break
 
-                if (current_distance_error <= distance_error_tolerance_m):
-                    print("converged to wp")
-                    turtlebot_node.move_turtle(0.0, 0.0)
-                    break
+                    angular_gains = pid_angular.get_gains(
+                        desired_heading_rad,
+                        turtlebot_node.orientation_euler[2]
+                    )
 
-                turtlebot_node.move_turtle(0.2, angular_gains)
+                    print("my heading error is", 
+                        np.rad2deg(pid_angular.error[0]))
 
-                rclpy.spin_once(turtlebot_node)
+                    if angular_gains >= MAX_ANG_SPEED_RAD:
+                        angular_gains = MAX_ANG_SPEED_RAD
+                    elif angular_gains <= -MAX_ANG_SPEED_RAD:
+                        angular_gains = -MAX_ANG_SPEED_RAD
+                    
+                    turtlebot_node.move_turtle(0.0, angular_gains)
+
+                    rclpy.spin_once(turtlebot_node)
+
+                ### ONCE HEADING IS CORRECT SEND FORWARD ---- 
+
+                while current_distance_error >= distance_error_tolerance_m:
+                    
+                    current_heading_error_rad = pid_angular.compute_error(
+                        desired_heading_rad,
+                        turtlebot_node.orientation_euler[2]                
+                    )
+                
+                    angular_gains = pid_angular.get_gains(
+                        desired_heading_rad,
+                        turtlebot_node.orientation_euler[2]
+                    )
+
+                    print("my heading error is", 
+                        np.rad2deg(pid_angular.error[0]))
+
+                    if angular_gains >= MAX_ANG_SPEED_RAD:
+                        angular_gains = MAX_ANG_SPEED_RAD
+                    elif angular_gains <= -MAX_ANG_SPEED_RAD:
+                        angular_gains = -MAX_ANG_SPEED_RAD
+                    
+                    dx = current_wp[0] - turtlebot_node.current_position[0]
+                    dy = current_wp[1] -  turtlebot_node.current_position[1]
+                    current_distance_error = np.sqrt(dx**2 + dy**2)
+
+                    if (current_distance_error <= distance_error_tolerance_m):
+                        print("converged to wp")
+                        turtlebot_node.move_turtle(0.0, 0.0)
+                        break
+
+                    turtlebot_node.move_turtle(0.2, angular_gains)
+
+                    rclpy.spin_once(turtlebot_node)
+
+                wp_counter = wp_counter + 1
 
     except KeyboardInterrupt:
         turtlebot_node.move_turtle(0.0, 0.0)
