@@ -96,12 +96,13 @@ def compute_distance(current_pos:np.ndarray,
     return np.linalg.norm(current_pos-des_pos)
 
 if __name__=="__main__":
+    
     pursuer_current_position = [0,0]
     pursuer_heading = np.deg2rad(90)
     pursuer = Agent(pursuer_current_position, pursuer_heading)
     
     evader_current_position  = [10,10]
-    evader_heading = np.deg2rad(0)
+    evader_heading = np.deg2rad(90)
     evader = Agent(evader_current_position, evader_heading)
     
     dt = 0.1
@@ -110,8 +111,8 @@ if __name__=="__main__":
     pursuer_vel = evader_vel*2.0
     pursuer.lin_vel_cmd = pursuer_vel
     
-    N = 1000 #number of iterations
-    pro_nav = ProNav.ProNav(3.0)
+    N = 500 #number of iterations
+    pro_nav = ProNav.ProNav(0.5)
     
     pursuer_history = []
     evader_history = []

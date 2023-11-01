@@ -11,7 +11,7 @@ def generate_launch_description():
     turtle_ns = LaunchConfiguration('turtlebot_ns', 
         default='turtle_ns')
 
-    logger_ns = LaunchConfiguration('logger_ns',
+    logger_ns = LaunchConfiguration('',
         default='logger_ns')
 
     turtle_node = Node(
