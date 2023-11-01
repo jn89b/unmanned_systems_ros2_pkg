@@ -6,5 +6,6 @@
     "python.analysis.extraPaths": [
         "/home/justin/ros2_ws/install/unmanned_systems_ros2_pkg/lib/python3.8/site-packages",
         "/opt/ros/foxy/lib/python3.8/site-packages"
-    ]
+    ],
+    "cmake.sourceDirectory": "/home/justin/ros2_ws/src/unmanned_systems_ros2_pkg/unmanned_systems_ros2_pkg"
 }
