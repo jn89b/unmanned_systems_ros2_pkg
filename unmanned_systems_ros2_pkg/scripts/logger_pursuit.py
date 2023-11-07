@@ -134,6 +134,7 @@ def main():
 			writer.writerow(myData)
 
 		rclpy.spin_once(pursuer_node)
+		rclpy.spin_once(evader_node)
 
 
 if __name__ == '__main__':
