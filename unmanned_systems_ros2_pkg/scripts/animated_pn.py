@@ -113,7 +113,7 @@ if __name__=="__main__":
     pro_nav_options = ["Simple ProNav", 
                        "True ProNav", 
                        "Augmented ProNav"]
-    guidance_option = pro_nav_options[2]
+    guidance_option = pro_nav_options[1]
     nav_constant = 5.0
     pro_nav = ProNav.ProNav(nav_constant)
 
@@ -175,7 +175,7 @@ if __name__=="__main__":
                 pursuer.lin_vel_cmd*np.cos(pursuer.heading),
                 pursuer.lin_vel_cmd*np.sin(pursuer.heading)])
 
-            flight_path_rate, vel_cmd = pro_nav.true_pro_nav(
+            flight_path_rate, vel_cmd = pro_nav.augmented_pro_nav(
                 pursuer.position, evader.position, dt,
                 target_vel, pursuer_vel)
             
