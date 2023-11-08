@@ -45,9 +45,7 @@ class Agent():
             lin_vel = self.max_lin_vel
         elif lin_vel < -self.max_lin_vel:
             lin_vel = -self.max_lin_vel
-        
-        print("lin_vel: ", lin_vel)
-            
+                    
         new_heading = (ang_vel*dt) + self.heading
     
         if new_heading > np.pi:
@@ -97,6 +95,8 @@ def compute_distance(current_pos:np.ndarray,
 
 if __name__=="__main__":
     
+    
+    ### INTIALIZE AGENTS ###
     pursuer_current_position = [0,0]
     pursuer_heading = np.deg2rad(90)
     pursuer = Agent(pursuer_current_position, pursuer_heading)
@@ -104,25 +104,38 @@ if __name__=="__main__":
     evader_current_position  = [10,10]
     evader_heading = np.deg2rad(90)
     evader = Agent(evader_current_position, evader_heading)
-    
-    dt = 0.1
-    
-    evader_vel = 0.8
-    pursuer_vel = evader_vel*2.0
-    pursuer.lin_vel_cmd = pursuer_vel
-    
-    N = 500 #number of iterations
-    pro_nav = ProNav.ProNav(0.5)
-    
+
+    #history         
     pursuer_history = []
     evader_history = []
+
+    #### PRO NAVOPTIONS ####
+    pro_nav_options = ["Simple ProNav", 
+                       "True ProNav", 
+                       "Augmented ProNav"]
+    guidance_option = pro_nav_options[2]
+    nav_constant = 5.0
+    pro_nav = ProNav.ProNav(nav_constant)
+
+    #### SIM PARAMETERS ####
+    dt = 0.1
+    N = 1000 #number of iterations
     
-    pro_nav_options = ["simple", "true"]
+    #### SET VELOCITIES ####
+    evader_vel = 0.8
+    pursuer_vel = evader_vel*1.3
+    pursuer.lin_vel_cmd = pursuer_vel
+
+    #### SET SEED ####
+    # this is used to make the simulation repeatable
+    set_seed = True
+    if set_seed == True:
+        np.random.seed(1)
     
-    guidance_option = pro_nav_options[0]
+    RANDOM_VEL = True
+    RANDOM_ANGLE = True
     
-    for i in range(N):
-        
+    for i in range(N):    
         #compute current los
         desired_heading_rad = compute_heading(
             pursuer.position, evader.position)
@@ -130,29 +143,61 @@ if __name__=="__main__":
         current_distance = compute_distance(
             pursuer.position, evader.position)
         
-        # #doing this to prevent crazy initial commands
-        # if i == 0:
-        #     desired_heading_rad = pro_nav.previous_heading_rad
-        #     current_distance = pro_nav.old_distance
-        
-        #compute flight path rate with simple pro nav
+        # use simple pro nav
         if guidance_option == pro_nav_options[0]:
             flight_path_rate = pro_nav.simple_pro_nav(
                 desired_heading_rad, dt)
 
             pursuer.move(flight_path_rate, pursuer_vel, dt)
 
+        # use true pro nav
         if guidance_option == pro_nav_options[1]:
-            
-            flight_path_rate, vel_cmd = pro_nav.true_pro_nav(
-                pursuer.position, evader.position, dt)
-            
-            flight_path_rate = pro_nav.simple_pro_nav(
-                desired_heading_rad, dt)
+            target_vel = np.array([
+                evader.lin_vel_cmd*np.cos(desired_heading_rad),
+                evader.lin_vel_cmd*np.sin(desired_heading_rad)])
 
-            pursuer.move(flight_path_rate, vel_cmd, dt)
+            pursuer_vel = np.array([
+                pursuer.lin_vel_cmd*np.cos(pursuer.heading),
+                pursuer.lin_vel_cmd*np.sin(pursuer.heading)])
+
+            flight_path_rate, vel_cmd = pro_nav.true_pro_nav(
+                pursuer.position, evader.position, dt,
+                target_vel, pursuer_vel)
             
-        evader.move(0, evader_vel, dt)
+            pursuer.move(flight_path_rate, vel_cmd, dt)
+        
+        if guidance_option == pro_nav_options[2]:
+            target_vel = np.array([
+                evader.lin_vel_cmd*np.cos(desired_heading_rad),
+                evader.lin_vel_cmd*np.sin(desired_heading_rad)])
+
+            pursuer_vel = np.array([
+                pursuer.lin_vel_cmd*np.cos(pursuer.heading),
+                pursuer.lin_vel_cmd*np.sin(pursuer.heading)])
+
+            flight_path_rate, vel_cmd = pro_nav.true_pro_nav(
+                pursuer.position, evader.position, dt,
+                target_vel, pursuer_vel)
+            
+            pursuer.move(flight_path_rate, vel_cmd, dt)
+                 
+        ## move the evader
+        if RANDOM_VEL == True and RANDOM_ANGLE == False:   
+            random_vel = np.random.uniform(evader_vel/2, evader_vel)
+            evader.move(0, random_vel, dt)
+        
+        elif RANDOM_VEL == False and RANDOM_ANGLE == True:
+            random_ang_vel = np.random.uniform(-np.pi/2, np.pi/2)
+            evader.move(random_ang_vel, evader_vel, dt)
+        
+        elif RANDOM_VEL == True and RANDOM_ANGLE == True:
+            random_vel = np.random.uniform(evader_vel/2, evader_vel)
+            random_ang_vel = np.random.uniform(-np.pi/2, np.pi/2)
+            evader.move(random_ang_vel, random_vel, dt)
+        
+        else:
+            evader.move(0, evader_vel, dt)
+        
         # pursuer_history.append(pursuer.position)
         if check_close(pursuer.position, evader.position) == True:
             print("Pursuer caught evader")
@@ -175,10 +220,10 @@ if __name__=="__main__":
 
 
     #plot heading
-    fig1, ax1 = plt.subplots()
-    ax1.plot(pursuer_heading_dg, label='pursuer')
+    fig1, ax1 = plt.subplots(2,1)
+    ax1[0].plot(pursuer_heading_dg, label='pursuer heading')
     
-    ax1.legend()
+    ax1[0].legend()
     plt.show()
 
     

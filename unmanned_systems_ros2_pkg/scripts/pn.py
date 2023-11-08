@@ -45,7 +45,7 @@ def main() -> None:
             turtlebot_pursuer.detected_heading_angle_list)
         
         print("mean target", mean_target)
-        
+         
         global_heading_ref = compute_global_heading(
             np.deg2rad(mean_target), turtlebot_pursuer.orientation_euler[2]
         )
@@ -55,8 +55,6 @@ def main() -> None:
             global_heading_ref, dt)
         
         turtlebot_pursuer.move_turtle(0.15, flight_path_rate)
-        
-        
         
         
 if __name__ == '__main__':
