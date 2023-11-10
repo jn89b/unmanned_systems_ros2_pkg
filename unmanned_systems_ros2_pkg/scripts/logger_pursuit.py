@@ -124,7 +124,6 @@ def main():
 			evader_node.current_position[0],
    			evader_node.current_position[1],
      		evader_node.orientation_euler[2],
-			#angular z 
 			]
 
 		# stick everything in the file

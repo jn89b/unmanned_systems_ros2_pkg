@@ -47,7 +47,9 @@ class ProNav():
 
     def true_pro_nav(self, current_position:np.ndarray, 
                      target_position:np.ndarray, dt:float, 
-                     target_vel:np.ndarray, pursuer_vel:np.ndarray) -> [float,float]:
+                     target_vel:np.ndarray, pursuer_vel:np.ndarray,
+                     use_own_heading:bool=False,
+                     los_value:float=0.0) -> [float,float]:
         """
         Current position and target position are 2D numpy arrays [x,y]
         Target velocity is a 2D numpy array [vx,vy]
@@ -61,7 +63,11 @@ class ProNav():
         r_dist_to_target = np.linalg.norm(r_to_target)
         
         #line of sight
-        los = np.arctan2(r_to_target[1], r_to_target[0])
+        if use_own_heading == True:
+            los = los_value
+        else:
+            los = np.arctan2(r_to_target[1], r_to_target[0])
+        
         los_dot = (los - self.previous_heading_rad)/dt
 
         #relative velocity
@@ -91,8 +97,10 @@ class ProNav():
 
     def augmented_pro_nav(self, current_position:np.ndarray, 
                      target_position:np.ndarray, dt:float, 
-                     target_vel:np.ndarray, pursuer_vel:np.ndarray) -> [float,float]:
-        """
+                     target_vel:np.ndarray, pursuer_vel:np.ndarray,
+                     use_own_heading:bool=False,
+                     los_value:float=0.0) -> [float,float]:
+        """ 
         Current position and target position are 2D numpy arrays [x,y]
         Target velocity is a 2D numpy array [vx,vy]
         Pursuer velocity is a 2D numpy array [vx,vy]
@@ -105,7 +113,11 @@ class ProNav():
         r_dist_to_target = np.linalg.norm(r_to_target)
         
         #line of sight
-        los = np.arctan2(r_to_target[1], r_to_target[0])
+        if use_own_heading == True:
+            los = los_value
+        else:
+            los = np.arctan2(r_to_target[1], r_to_target[0])
+        
         los_dot = (los - self.previous_heading_rad)/dt
 
         #relative velocity

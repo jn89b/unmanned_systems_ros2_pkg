@@ -35,6 +35,8 @@ class TurtleBotNode(Node):
         self.orientation_quat = [0,0,0,0] #x,y,z,w
         self.orientation_euler = [0,0,0] #roll, pitch, yaw
         
+        self.current_velocity = [0.0, 0.0]
+        
         self.detected_range_list = [] #depth detected
         self.detected_heading_angle_list = [] #heading detected
 
@@ -53,6 +55,10 @@ class TurtleBotNode(Node):
         self.orientation_euler[0] = roll
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
+        
+        # get x and y velocity
+        self.current_velocity[0] = msg.twist.twist.linear.x
+        self.current_velocity[1] = msg.twist.twist.linear.y
         
         
     def move_turtle(self, linear_vel:float, angular_vel:float):

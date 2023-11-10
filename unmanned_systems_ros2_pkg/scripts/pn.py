@@ -9,7 +9,7 @@ from unmanned_systems_ros2_pkg import TurtleBotNode, quaternion_tools
 from unmanned_systems_ros2_pkg import ProNav
 
 
-def get_mean_target(heading_list:list)-> float:
+def get_mean_heading_target(heading_list:list)-> float:
      heading_list = np.array(heading_list)
      mean_heading_target = np.mean(heading_list)
      return mean_heading_target   
@@ -41,7 +41,7 @@ def main() -> None:
         
         rclpy.spin_once(turtlebot_pursuer)
         
-        mean_target = get_mean_target(
+        mean_target = get_mean_heading_target(
             turtlebot_pursuer.detected_heading_angle_list)
         
         print("mean target", mean_target)
@@ -51,8 +51,16 @@ def main() -> None:
         )
     
         #ang cmd vel    
-        flight_path_rate = pro_nav.simple_pro_nav(
-            global_heading_ref, dt)
+        # flight_path_rate = pro_nav.simple_pro_nav(
+        #     global_heading_ref, dt)
+        
+        # augmented pro nav
+        ## 
+        
+        flight_path_rate, cmd_vel = pro_nav.augmented_pro_nav(
+            bla,bla,bla, bla, bla, True, global_heading_ref
+        )
+    
         
         turtlebot_pursuer.move_turtle(0.15, flight_path_rate)
         

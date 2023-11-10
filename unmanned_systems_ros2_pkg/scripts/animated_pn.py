@@ -101,8 +101,8 @@ if __name__=="__main__":
     pursuer_heading = np.deg2rad(90)
     pursuer = Agent(pursuer_current_position, pursuer_heading)
     
-    evader_current_position  = [10,10]
-    evader_heading = np.deg2rad(90)
+    evader_current_position  = [2,2]
+    evader_heading = np.deg2rad(45)
     evader = Agent(evader_current_position, evader_heading)
 
     #history         
@@ -113,12 +113,12 @@ if __name__=="__main__":
     pro_nav_options = ["Simple ProNav", 
                        "True ProNav", 
                        "Augmented ProNav"]
-    guidance_option = pro_nav_options[1]
+    guidance_option = pro_nav_options[2]
     nav_constant = 5.0
     pro_nav = ProNav.ProNav(nav_constant)
 
     #### SIM PARAMETERS ####
-    dt = 0.1
+    dt = 0.01
     N = 1000 #number of iterations
     
     #### SET VELOCITIES ####
