@@ -34,7 +34,8 @@ def main() -> None:
     turtlebot_pursuer = TurtleBotNode.TurtleBotNode('turtle', 'pursuer')    
     turtlebot_pursuer.move_turtle(0.0,0.0)
     
-    pro_nav = ProNav.ProNav(10)    
+    # 5 works well for my side 
+    pro_nav = ProNav.ProNav(5)    
     dt = 0.1  
     dt = 1/3 
     
@@ -52,12 +53,8 @@ def main() -> None:
         )
         
         evader_position = np.array(turtlebot_pursuer.evader_position)
-        # evader_velocity = np.array(turtlebot_pursuer.evader_velocity)
-
+    
         evader_velocity = (evader_position - old_evader_position)/dt
-        
-        # r_dist = np.linalg.norm(evader_position - \
-        #     np.array(turtlebot_pursuer.current_position))
                 
         flight_path_rate, cmd_vel = pro_nav.true_pro_nav(
             np.array(turtlebot_pursuer.current_position), 
@@ -68,17 +65,8 @@ def main() -> None:
             True, global_heading_ref    
         )
         
-        # flight_path_rate = pro_nav.simple_pro_nav(global_heading_ref, dt)
-        # print("sending", flight_path_rate, cmd_vel)
         old_evader_position = evader_position
-        
-        # if np.linalg.norm(evader_velocity) < 0.05:
-        #     cmd_vel = 0.1
-
-        print("cmd_vel", cmd_vel)
-                
         turtlebot_pursuer.move_turtle(cmd_vel, flight_path_rate)
-        old_flight_rate = flight_path_rate
     
 if __name__ == '__main__':
     main()

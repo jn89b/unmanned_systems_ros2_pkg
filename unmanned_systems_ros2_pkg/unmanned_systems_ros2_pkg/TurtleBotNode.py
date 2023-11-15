@@ -82,10 +82,6 @@ class TurtleBotNode(Node):
         self.orientation_euler[1] = pitch 
         self.orientation_euler[2] = yaw
         
-        # get x and y velocity
-        # self.current_velocity[0] = msg.twist.twist.linear.x
-        # self.current_velocity[1] = msg.twist.twist.linear.y
-        
         current_vel_mag = msg.twist.twist.linear.x
         self.current_velocity[0] = current_vel_mag*np.cos(yaw)
         self.current_velocity[1] = current_vel_mag*np.sin(yaw)

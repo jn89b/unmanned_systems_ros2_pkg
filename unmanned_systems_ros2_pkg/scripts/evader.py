@@ -50,14 +50,14 @@ def main() -> None:
     turtlebot_evader = TurtleBotNode.TurtleBotNode('turtle', 'evader')    
     turtlebot_evader.move_turtle(0.0,0.0)
 
-    set_random = False
+    set_random = True
     is_done = False
-    n_random_waypoints =  3
+    n_random_waypoints =  5
     heading_tol = 0.1; #radians
     dist_tolerance = 0.25 #meters
     
-    turn_speed = 0.1 #rad/speed
-    line_speed = 0.1 #m/s
+    turn_speed = 1.1 #rad/speed
+    line_speed = 0.15 #m/s
     stop_speed = 0.0 
     
     if set_random == False:

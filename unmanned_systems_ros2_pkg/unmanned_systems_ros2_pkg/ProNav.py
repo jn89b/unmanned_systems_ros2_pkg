@@ -81,8 +81,7 @@ class ProNav():
         v_closing = np.linalg.norm(v_closing)
         
         #acceleration command 
-        acmd = self.nav_gain*v_closing#*los_dot
-        print("acmd", acmd)
+        acmd = self.nav_gain*v_closing
         #we want to find the command velocity from this acceleration, 
         #since we're not using the acceleration directly
         v_x = -pursuer_vel[0]*np.cos(los) + acmd*np.cos(los)
@@ -131,14 +130,13 @@ class ProNav():
         #closing velocity
         v_closing = (v_rel_mag)*r_to_target/r_dist_to_target        
         v_closing = np.linalg.norm(v_closing)
-        print("v closing", v_closing)
         #acceleration command with augmented term
         #the augmented term is the worst case scenario 
         #the "smart" thing for the pursuer to do is move perpendicular 
         #to the line of sight so we account for that 
         norm_tangent = np.array([-np.sin(los), np.cos(los)])
         
-        acmd = self.nav_gain*v_closing*los_dot + \
+        acmd = self.nav_gain*v_closing+ \
             ((self.nav_gain + norm_tangent) / 2)
         
         #we want to find the command velocity from this acceleration, 
