@@ -34,10 +34,14 @@ def main() -> None:
     turtlebot_pursuer = TurtleBotNode.TurtleBotNode('turtle', 'pursuer')    
     turtlebot_pursuer.move_turtle(0.0,0.0)
     
-    # 5 works well for my side 
+    # 5 works well for my side increase to make it more snappier on turns 
     pro_nav = ProNav.ProNav(5)    
-    dt = 0.1  
-    dt = 1/3 
+    dt = 0.01 
+    
+    #odom frequency 
+    odom_sampling_freq = 30.0
+    
+    dt = (1/odom_sampling_freq) * 10
     
     old_evader_position = np.array([2,1])
     
