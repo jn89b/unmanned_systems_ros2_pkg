@@ -122,7 +122,7 @@ if __name__=="__main__":
     N = 1000 #number of iterations
     
     #### SET VELOCITIES ####
-    evader_vel = 0.8
+    evader_vel = 1.0
     pursuer_vel = evader_vel*1.3
     pursuer.lin_vel_cmd = pursuer_vel
 
@@ -156,6 +156,7 @@ if __name__=="__main__":
                 evader.lin_vel_cmd*np.cos(desired_heading_rad),
                 evader.lin_vel_cmd*np.sin(desired_heading_rad)])
 
+            #this is in terms of world frame 
             pursuer_vel = np.array([
                 pursuer.lin_vel_cmd*np.cos(pursuer.heading),
                 pursuer.lin_vel_cmd*np.sin(pursuer.heading)])

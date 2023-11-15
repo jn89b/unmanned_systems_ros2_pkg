@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import numpy as np
+
 from rclpy.node import Node
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
@@ -28,6 +30,9 @@ class TurtleBotNode(Node):
         self.odom_subscriber = self.create_subscription(
             Odometry, self.ns +"/odom", self.odom_callback, 1)
         
+        self.evader_subscriber = self.create_subscription(
+            Odometry, "/evader/odom", self.evader_callback, 1)
+        
         self.lidar_subscriber = self.create_subscription(
              LaserScan, self.ns+"/scan", self.lidar_track_cb, 1)
         
@@ -37,9 +42,30 @@ class TurtleBotNode(Node):
         
         self.current_velocity = [0.0, 0.0]
         
+        self.evader_position = [0,0]
+        self.evader_velocity = [0,0]
+        
         self.detected_range_list = [] #depth detected
         self.detected_heading_angle_list = [] #heading detected
 
+
+    def evader_callback(self, msg:Odometry) -> None:
+        """subscribe to odometry"""
+        self.evader_position[0] = msg.pose.pose.position.x
+        self.evader_position[1] = msg.pose.pose.position.y
+        
+        qx = msg.pose.pose.orientation.x
+        qy = msg.pose.pose.orientation.y
+        qz = msg.pose.pose.orientation.z
+        qw = msg.pose.pose.orientation.w        
+        roll,pitch,yaw = quaternion_tools.euler_from_quaternion(qx, qy, qz, qw)
+
+        # get x and y velocity
+        evader_velocity_mag = msg.twist.twist.linear.x
+        self.evader_velocity[0] = evader_velocity_mag*np.cos(yaw)
+        self.evader_velocity[1] = evader_velocity_mag*np.sin(yaw)
+        
+        
     def odom_callback(self,msg:Odometry):
         """subscribe to odometry"""
         self.current_position[0] = msg.pose.pose.position.x
@@ -57,13 +83,28 @@ class TurtleBotNode(Node):
         self.orientation_euler[2] = yaw
         
         # get x and y velocity
-        self.current_velocity[0] = msg.twist.twist.linear.x
-        self.current_velocity[1] = msg.twist.twist.linear.y
+        # self.current_velocity[0] = msg.twist.twist.linear.x
+        # self.current_velocity[1] = msg.twist.twist.linear.y
+        
+        current_vel_mag = msg.twist.twist.linear.x
+        self.current_velocity[0] = current_vel_mag*np.cos(yaw)
+        self.current_velocity[1] = current_vel_mag*np.sin(yaw)
         
         
     def move_turtle(self, linear_vel:float, angular_vel:float):
         """Moves turtlebot"""
         twist = Twist()
+        
+        if linear_vel >= 0.23:
+            linear_vel = 0.23
+        elif linear_vel <= -0.23:
+            linear_vel = -0.23
+        
+        if angular_vel >= 2.84:
+            angular_vel = 2.84
+        elif angular_vel <= -2.84: 
+            angular_vel = -2.84    
+    
         twist.linear.x = linear_vel
         twist.angular.z = angular_vel
         self.vel_publisher.publish(twist)

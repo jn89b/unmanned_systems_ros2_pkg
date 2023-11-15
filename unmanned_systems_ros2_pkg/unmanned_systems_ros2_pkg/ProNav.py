@@ -76,20 +76,24 @@ class ProNav():
         
         #closing velocity
         v_closing = (v_rel_mag)*r_to_target/r_dist_to_target        
+        
+        # v_closing = r_to_target/r_dist_to_target
         v_closing = np.linalg.norm(v_closing)
         
         #acceleration command 
-        acmd = self.nav_gain*v_closing*los_dot
-        
+        acmd = self.nav_gain*v_closing#*los_dot
+        print("acmd", acmd)
         #we want to find the command velocity from this acceleration, 
         #since we're not using the acceleration directly
-        v_x = -pursuer_vel*np.cos(los) + acmd*np.cos(los)
-        v_y = pursuer_vel*np.sin(los) + acmd*np.sin(los)
+        v_x = -pursuer_vel[0]*np.cos(los) + acmd*np.cos(los)
+        v_y =  pursuer_vel[1]*np.sin(los) + acmd*np.sin(los)
+
         v_cmd = np.array([v_x, v_y])
         v_cmd = np.linalg.norm(v_cmd)
         
+        #get flight path rate from acceleration command            
         # not technically correct but its close enough
-        flight_path_rate = self.nav_gain*(los_dot) 
+        flight_path_rate = self.nav_gain*(los_dot)
         self.previous_heading_rad = los
         
         return flight_path_rate, v_cmd
@@ -127,7 +131,7 @@ class ProNav():
         #closing velocity
         v_closing = (v_rel_mag)*r_to_target/r_dist_to_target        
         v_closing = np.linalg.norm(v_closing)
-        
+        print("v closing", v_closing)
         #acceleration command with augmented term
         #the augmented term is the worst case scenario 
         #the "smart" thing for the pursuer to do is move perpendicular 

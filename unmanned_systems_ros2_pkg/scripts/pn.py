@@ -24,7 +24,7 @@ def compute_global_heading(heading_target_rad:float,
     elif global_heading_rad < 0:
         global_heading_rad = global_heading_rad + 2*np.pi
     
-    print("global heading deg", np.rad2deg(global_heading_rad))
+    # print("global heading deg", np.rad2deg(global_heading_rad))
     
     return global_heading_rad
 
@@ -34,8 +34,11 @@ def main() -> None:
     turtlebot_pursuer = TurtleBotNode.TurtleBotNode('turtle', 'pursuer')    
     turtlebot_pursuer.move_turtle(0.0,0.0)
     
-    pro_nav = ProNav.ProNav(3.0)    
-    dt = 0.1
+    pro_nav = ProNav.ProNav(10)    
+    dt = 0.1  
+    dt = 1/3 
+    
+    old_evader_position = np.array([2,1])
     
     while rclpy.ok():
         
@@ -43,28 +46,40 @@ def main() -> None:
         
         mean_target = get_mean_heading_target(
             turtlebot_pursuer.detected_heading_angle_list)
-        
-        print("mean target", mean_target)
-         
+                 
         global_heading_ref = compute_global_heading(
             np.deg2rad(mean_target), turtlebot_pursuer.orientation_euler[2]
         )
-    
-        #ang cmd vel    
-        # flight_path_rate = pro_nav.simple_pro_nav(
-        #     global_heading_ref, dt)
         
-        # augmented pro nav
-        ## 
+        evader_position = np.array(turtlebot_pursuer.evader_position)
+        # evader_velocity = np.array(turtlebot_pursuer.evader_velocity)
+
+        evader_velocity = (evader_position - old_evader_position)/dt
         
-        flight_path_rate, cmd_vel = pro_nav.augmented_pro_nav(
-            bla,bla,bla, bla, bla, True, global_heading_ref
+        # r_dist = np.linalg.norm(evader_position - \
+        #     np.array(turtlebot_pursuer.current_position))
+                
+        flight_path_rate, cmd_vel = pro_nav.true_pro_nav(
+            np.array(turtlebot_pursuer.current_position), 
+            evader_position,
+            dt, 
+            evader_velocity, 
+            np.array(turtlebot_pursuer.current_velocity),
+            True, global_heading_ref    
         )
+        
+        # flight_path_rate = pro_nav.simple_pro_nav(global_heading_ref, dt)
+        # print("sending", flight_path_rate, cmd_vel)
+        old_evader_position = evader_position
+        
+        # if np.linalg.norm(evader_velocity) < 0.05:
+        #     cmd_vel = 0.1
+
+        print("cmd_vel", cmd_vel)
+                
+        turtlebot_pursuer.move_turtle(cmd_vel, flight_path_rate)
+        old_flight_rate = flight_path_rate
     
-        
-        turtlebot_pursuer.move_turtle(0.15, flight_path_rate)
-        
-        
 if __name__ == '__main__':
     main()
     
