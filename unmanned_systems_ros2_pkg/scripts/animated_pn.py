@@ -12,7 +12,7 @@ Coordinate frame is cartesian with origin at bottom left
 class Agent():
 
     def __init__(self, init_position:np.ndarray, 
-                 init_heading:float, max_ang_vel_deg:float=500,
+                 init_heading:float, max_ang_vel_deg:float=360,
                  max_lin_vel:float=10.0) -> None:
         
         self.position  = init_position

@@ -16,29 +16,9 @@ class ProNav():
         """
         Returns rate of flight path change in radians per second
         """
+        print("new heading deg", np.rad2deg(new_heading_rad))
+        print("old heading deg", np.rad2deg(self.previous_heading_rad))
         los_dot = (new_heading_rad - self.previous_heading_rad)/dt
-        
-        # #wrap heading between 0 and 2pi
-        # if los_dot > 2*np.pi:
-        #     los_dot = los_dot - 2*np.pi
-        # elif los_dot < 0:
-        #     los_dot = los_dot + 2*np.pi
-            
-        # if new_heading_rad > 2*np.pi:
-        #     new_heading_rad = new_heading_rad - 2*np.pi
-        # elif new_heading_rad < 0:
-        #     new_heading_rad = new_heading_rad + 2*np.pi
-            
-        # #wrap between -pi and pi
-        # if los_dot > np.pi:
-        #     los_dot = los_dot - np.pi
-        # elif los_dot < -np.pi:
-        #     los_dot = los_dot + np.pi
-            
-        # if new_heading_rad > np.pi:
-        #     new_heading_rad = new_heading_rad - np.pi
-        # elif new_heading_rad < -np.pi:
-        #     new_heading_rad = new_heading_rad + np.pi
             
         self.previous_heading_rad = new_heading_rad
         flight_path_rate = self.nav_gain*(los_dot)
@@ -67,7 +47,7 @@ class ProNav():
             los = los_value
         else:
             los = np.arctan2(r_to_target[1], r_to_target[0])
-        
+                
         los_dot = (los - self.previous_heading_rad)/dt
 
         #relative velocity
@@ -94,7 +74,7 @@ class ProNav():
         # not technically correct but its close enough
         flight_path_rate = self.nav_gain*(los_dot)
         self.previous_heading_rad = los
-        
+            
         return flight_path_rate, v_cmd
         
 
