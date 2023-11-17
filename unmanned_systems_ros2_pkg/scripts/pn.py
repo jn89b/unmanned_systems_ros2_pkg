@@ -75,19 +75,19 @@ def main() -> None:
 
         evader_velocity = (evader_position - old_evader_position)/dt
                 
-        # flight_path_rate, cmd_vel = pro_nav.true_pro_nav(
-        #     np.array(turtlebot_pursuer.current_position), 
-        #     evader_position,
-        #     dt, 
-        #     evader_velocity, 
-        #     np.array(turtlebot_pursuer.current_velocity),
-        #     True, global_heading_ref    
-        # )
-        
-        cmd_vel = 0.20
-        flight_path_rate = pro_nav.simple_pro_nav(
-            global_heading_ref, dt
+        flight_path_rate, cmd_vel = pro_nav.true_pro_nav(
+            np.array(turtlebot_pursuer.current_position), 
+            evader_position,
+            dt, 
+            evader_velocity, 
+            np.array(turtlebot_pursuer.current_velocity),
+            True, global_heading_ref    
         )
+        
+        # cmd_vel = 0.20
+        # flight_path_rate = pro_nav.simple_pro_nav(
+        #     global_heading_ref, dt
+        # )
         
         # do this command for half a second        
         print("flight path rate", flight_path_rate)
