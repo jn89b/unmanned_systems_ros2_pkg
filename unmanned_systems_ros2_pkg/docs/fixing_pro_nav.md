@@ -1,9 +1,7 @@
 # Fixing Pro Nav
-- Replace your ProNav.py with the new ProNav.py 
+- Replace your ProNav.py with the new ProNav.py this is in unmanned_systems_ros_2_pkg  
 - Replace the TurtleBotNode.py with the new TurtleBotNode.py
 - Replace the pn.py with the new pn.py
 
 # How was it fixed
-- The biggest thing is the current velocity of the pursuer was in body frame not in world frame 
-- Also I found out a good dt to use is a tenth of the odometry, not sure why but it just works. 
-- 
+- We have to control the frequency of the pn node so I have it running a specific rate  
