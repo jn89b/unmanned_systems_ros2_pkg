@@ -25,7 +25,7 @@ def get_time_in_secs(some_node:Node) -> float:
 
 class OdomLocNode(Node):
 	def __init__(self, namespace:str):
-		super().__init__('logger_node')
+		super().__init__(namespace+'logger_node')
 		self.current_position = [None,None]
 		self.orientation_euler = [None,None,None]
 		

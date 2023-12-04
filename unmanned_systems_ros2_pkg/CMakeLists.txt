@@ -48,9 +48,9 @@ ament_package()
 #launch
 install(DIRECTORY
   launch
-  # models
-  # urdf
-  # worlds
-  # assets
+  models
+  urdf
+  worlds
+  assets
   DESTINATION share/${PROJECT_NAME}
 )
