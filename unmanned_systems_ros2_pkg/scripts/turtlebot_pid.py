@@ -14,7 +14,6 @@ from unmanned_systems_ros2_pkg import PIDTemplate
 def get_time_in_secs(some_node:Node) -> float:
     return some_node.get_clock().now().nanoseconds /1E9 
     
-
 def euler_from_quaternion(x:float, y:float, z:float, w:float) -> tuple:
         """
         Convert a quaternion into euler angles (roll, pitch, yaw)
