@@ -2,9 +2,7 @@ from itertools import permutations
 import math as m
 import time 
 
-waypoints = [(1,1), (9,7), (1,9), (4,4), (9,4), 
-             (6,14), (3,11), (14,1), 
-             (1,14), (14,14), (7,10)]
+waypoints = [(1,1), (9,7), (1,9), (4,4)]
 
 other_waypoints = {}
 cost_dictionary = {}
