@@ -71,6 +71,8 @@ for i in range(0,len(gx)):
         if i!=j:
             start_location = [gx[i],gy[i]]
             next_location =  [gx[j],gy[j]]
+            #use astar to find your paths 
+            #then compute the temp_cost and store it in the cost_matrix
             temp_cost = m.dist(start_location, next_location)
             cost_matrix[i,j] = temp_cost
 elapsed_time = time.time() - t
