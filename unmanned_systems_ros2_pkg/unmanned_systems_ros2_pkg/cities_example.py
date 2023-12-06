@@ -2,7 +2,9 @@ from itertools import permutations
 import math as m
 import time 
 
-waypoints = [(1,1), (9,7), (1,9), (4,4)]
+waypoints = [(1,1), (9,7), (1,9), (4,4), (9,4), 
+             (6,14), (3,11), (14,1), 
+             (1,14), (14,14), (7,10)]
 
 other_waypoints = {}
 cost_dictionary = {}
@@ -46,7 +48,8 @@ for j, path in enumerate(paths):
     for i in range(len(path)-1):
         sum_cost += cost_dictionary[path[i], path[i+1]]
         
-    total_cost.append(sum_cost)    
+    total_cost.append(sum_cost)
+        
 end_time = time.time()
 print("Time elapsed: ", end_time - start_time)
 # get best path
