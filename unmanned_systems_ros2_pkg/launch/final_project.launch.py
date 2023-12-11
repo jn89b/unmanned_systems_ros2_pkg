@@ -154,6 +154,17 @@ def generate_launch_description():
 
     launch_file_dir = os.path.join(get_package_share_directory('turtlebot3_gazebo'), 'launch')
 
+    #run another node
+    dungeon_master_node = Node(
+            package='unmanned_systems_ros2_pkg',
+            executable='dungeon_master',
+            name='dungeon_master',
+            output='screen',
+            parameters=[{'use_sim_time': use_sim_time}],
+            arguments=[urdf],
+        )
+    
+
     #add actions
     ld = LaunchDescription()
     ld.add_action(start_gazebo_server_cmd)
@@ -167,6 +178,7 @@ def generate_launch_description():
     
     # ld.add_action(spawn_main_tb)
     ld.add_action(state_publisher_cmd)
+    ld.add_action(dungeon_master_node)
 
     return ld
 
