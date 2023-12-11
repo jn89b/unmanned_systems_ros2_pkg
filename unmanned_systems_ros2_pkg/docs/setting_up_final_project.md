@@ -9,6 +9,15 @@ Download the following scripts and put it in your respective "scripts" directory
 - foot_ninja_spawn.py
 - dungeon_master.py
 
+## Change the world file configuration 
+In the burger.model and waffle_pi.model files:
+- Change the uri model to your directory 
+- See the attached link 
+- https://github.com/jn89b/unmanned_systems_ros2_pkg/blob/2b294027ca57bc59d4fefe808093e986cfa121df/unmanned_systems_ros2_pkg/worlds/turtlebot3_final_project/burger.model#L50C1-L50C124
+- https://github.com/jn89b/unmanned_systems_ros2_pkg/blob/2b294027ca57bc59d4fefe808093e986cfa121df/unmanned_systems_ros2_pkg/worlds/turtlebot3_final_project/waffle_pi.model#L50
+- In your bashrc script make sure TURTLEBOT3_MODEL is set to "burger"
+
+
 ## Add launch files to your launch directory
 Follow this directory https://github.com/jn89b/unmanned_systems_ros2_pkg/tree/main/unmanned_systems_ros2_pkg/launch
 
