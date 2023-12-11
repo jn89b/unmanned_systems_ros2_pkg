@@ -41,6 +41,9 @@ install(PROGRAMS
   scripts/pn.py
   scripts/evader.py
   scripts/logger_pursuit.py
+  scripts/foot_ninja_1.py
+  scripts/foot_ninja_2.py
+  scripts/foot_ninja_spawn.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

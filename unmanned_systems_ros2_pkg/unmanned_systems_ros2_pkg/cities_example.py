@@ -30,6 +30,8 @@ for wp in waypoints:
             #c->a 
             cost_dictionary[other_wp, wp] = total_distance
 
+#%%
+
 # Compute all the possible paths
 paths = list(permutations(waypoints, len(waypoints)))
 total_cost = []
@@ -37,6 +39,7 @@ print("Number of compute times: ", compute_times)
 print("Number of paths: ", len(paths))
 
 
+#%%
 n_iterations = 100
 
 start_time = time.time()
