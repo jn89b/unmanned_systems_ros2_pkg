@@ -178,7 +178,7 @@ def generate_launch_description():
     
     # ld.add_action(spawn_main_tb)
     ld.add_action(state_publisher_cmd)
-    ld.add_action(dungeon_master_node)
+    # ld.add_action(dungeon_master_node)
 
     return ld
 

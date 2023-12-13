@@ -239,5 +239,7 @@ print("best order of waypoints to visit", wp_order)
 
 
 
-
+def main() -> None:
+    rclpy.init(args=None)
+    
 
